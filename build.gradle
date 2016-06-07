@@ -10,19 +10,22 @@ buildscript {
   }
   repositories {
     mavenLocal()
+    mavenCentral()
     jcenter()
   }
   dependencies {
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}"
+    classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
   }
 }
 
-apply plugin: "kotlin"
-apply plugin: "idea"
-apply plugin: "maven"
+apply plugin: 'kotlin'
+apply plugin: 'idea'
+apply plugin: 'com.bmuschko.nexus'
 
 repositories {
   mavenLocal()
+  mavenCentral()
   jcenter()
 }
 
