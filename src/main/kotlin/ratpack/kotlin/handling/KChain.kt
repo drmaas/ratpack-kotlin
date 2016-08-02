@@ -27,6 +27,7 @@ class KChain (val delegate: Chain) : Chain by delegate {
     fun delete(path: String = "", cb: KContext.() -> Unit) : KChain = KChain(delegate.delete (path) { KContext(it).cb() })
     fun options(path: String = "", cb: KContext.() -> Unit) : KChain = KChain(delegate.options (path) { KContext(it).cb() })
     fun patch(path: String = "", cb: KContext.() -> Unit) : KChain = KChain(delegate.patch (path) { KContext(it).cb() })
+    //TODO these appear to not compile when consumed, unsure how to resolve
     fun onlyIf(test: Predicate<in Context>, cb: KContext.() -> Unit) : KChain = KChain(delegate.onlyIf(test, KHandlers.from(cb)))
     fun `when`(test: Predicate<in Context>, cb: KChain.() -> Unit) : KChain = KChain(delegate.`when`({ ctx:Context -> test.apply(ctx) }) { KChain(it).cb() })
 }
