@@ -1,6 +1,5 @@
 package ratpack.kotlin.handling
 
-import kotlin.jvm.functions.Function1
 import ratpack.kotlin.RatpackKotlinDslSpec
 
 /**
