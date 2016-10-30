@@ -1,6 +1,6 @@
 buildscript {
   ext {
-    ratpackVersion = '1.4.0-rc-2'
+    ratpackVersion = '1.4.3'
     kotlinVersion = '1.0.4'
     groovyVersion = '2.4.7'
     spockVersion = '1.0-groovy-2.4'
