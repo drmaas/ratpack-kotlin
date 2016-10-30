@@ -116,14 +116,15 @@ abstract class KChainAction : Action<Chain> {
     fun register(registryAction: RegistrySpec.() -> Unit) : KChain = dg().register(registryAction)
 
     //when
-    //TODO these appear to not work, unsure how to resolve
-    fun `when`(test: Predicate<in Context>, cb:KChain.() -> Unit) : KChain = KChain(dg().`when`(test, cb))
+    fun `when`(test: Predicate<in Context>, cb:KChain.() -> Unit) : KChain = dg().`when`(test, cb)
     fun `when`(test: Predicate<in Context>, action: Action<in Chain>) : KChain = KChain(dg().`when`(test, action))
     fun `when`(test: Predicate<in Context>, action: Class<out Action<in Chain>>) : KChain = KChain(dg().`when`(test, action))
+    fun `when`(test: Boolean, cb:KChain.() -> Unit) : KChain = dg().`when`(test, cb)
+    fun `when`(test: Boolean, action: Action<in Chain>) : KChain = KChain(dg().`when`(test, action))
+    fun `when`(test: Boolean, action: Class<out Action<in Chain>>) : KChain = KChain(dg().`when`(test, action))
 
     //onlyIf
-    //TODO these appear to not work, unsure how to resolve
-    fun onlyIf(test: Predicate<in Context>, cb: KContext.() -> Unit) : KChain = KChain(dg().onlyIf(test, cb))
+    fun onlyIf(test: Predicate<in Context>, cb: KContext.() -> Unit) : KChain = dg().onlyIf(test, cb)
     fun onlyIf(test: Predicate<in Context>, handler: Handler) : KChain = KChain(dg().onlyIf(test, handler))
     fun onlyIf(test: Predicate<in Context>, handler: Class<out Handler>) : KChain = KChain(dg().onlyIf(test, handler))
 
