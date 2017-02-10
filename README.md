@@ -2,9 +2,9 @@
 
 [![Build Status](https://travis-ci.org/drmaas/ratpack-kotlin.svg?branch=master)](https://travis-ci.org/drmaas/ratpack-kotlin)
 
-Files used to create a ratpack dsl in kotlin.
+[![forthebadge](https://forthebadge.com/images/badges/uses-badges.svg)](https://forthebadge.com)
 
-Based on the ratpack kotlin dsl files from https://github.com/jaguililla/hexagon
+Build fluent kotlin ratpack applications.
 
 ## Maven Artifact
 
@@ -23,5 +23,9 @@ Maven:
 Gradle:
 
 ```groovy
-compile 'me.drmaas:ratpack-kotlin:0.4.0'
+compile 'me.drmaas:ratpack-kotlin:x.x.x'
 ```
+
+Examples:
+
+TODO

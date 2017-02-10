@@ -1,1 +1,1 @@
-rootProject.name="ratpack-kotlin"
+include 'ratpack-kotlin-dsl', 'ratpack-kotlin-test'
