@@ -8,22 +8,20 @@ Build fluent kotlin ratpack applications.
 
 ## Usage
 
-Sample app:
+Sample App.kt:
 ```
-object App {
-  @JvmStatic fun main(args : Array<String>) {
-    ratpack {
-      serverConfig {
-        development(true)
-        port(9000)
-      }
-      bindings {
-        bindInstance("foobar")
-      }
-      handlers {
-        get("test") {
-          render("hello " + context.get(String::class.java))
-        }
+fun main(args: Array<String>) {
+  ratpack {
+    serverConfig {
+      development(true)
+      port(9000)
+    }
+    bindings {
+      bindInstance("foobar")
+    }
+    handlers {
+      get("test") {
+        render("hello " + context.get(String::class.java))
       }
     }
   }
