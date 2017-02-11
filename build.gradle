@@ -18,8 +18,11 @@ apply plugin: "nebula.nebula-release"
 
 allprojects {
   group = 'me.drmaas'
-  apply plugin: "kotlin"
   apply plugin: "idea"
+}
+
+subprojects {
+  apply plugin: "kotlin"
 //  apply plugin: "nebula.nebula-bintray"
   apply plugin: "com.bmuschko.nexus"
 
