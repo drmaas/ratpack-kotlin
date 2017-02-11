@@ -32,40 +32,40 @@ allprojects {
   sourceSets {
     main.java.srcDirs += 'src/main/kotlin'
   }
-}
 
-apply from: 'dependencies.gradle'
-
-modifyPom {
-  project {
-    name 'Ratpack kotlin dsl library'
-    description 'Ratpack kotlin dsl library'
-    url 'https://github.com/drmaas/ratpack-kotlin'
-    inceptionYear '2016'
-
-    scm {
+  modifyPom {
+    project {
+      name 'Ratpack kotlin dsl library'
+      description 'Ratpack kotlin dsl library'
       url 'https://github.com/drmaas/ratpack-kotlin'
-      connection 'scm:https://drmaas@github.com/drmaas/ratpack-kotlin.git'
-      developerConnection 'scm:git://github.com/drmaas/ratpack-kotlin.git'
-    }
+      inceptionYear '2016'
 
-    licenses {
-      license {
-        name 'The Apache Software License, Version 2.0'
-        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-        distribution 'repo'
+      scm {
+        url 'https://github.com/drmaas/ratpack-kotlin'
+        connection 'scm:https://drmaas@github.com/drmaas/ratpack-kotlin.git'
+        developerConnection 'scm:git://github.com/drmaas/ratpack-kotlin.git'
       }
-    }
 
-    developers {
-      developer {
-        id 'drmaas'
-        name 'Dan Maas'
-        email 'drmaas@gmail.com'
+      licenses {
+        license {
+          name 'The Apache Software License, Version 2.0'
+          url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+          distribution 'repo'
+        }
+      }
+
+      developers {
+        developer {
+          id 'drmaas'
+          name 'Dan Maas'
+          email 'drmaas@gmail.com'
+        }
       }
     }
   }
 }
+
+apply from: 'dependencies.gradle'
 
 task wrapper(type: Wrapper) {
   gradleVersion = '3.3'
