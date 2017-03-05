@@ -1,6 +1,6 @@
 buildscript {
   ext {
-    kotlinVersion = '1.0.6'
+    kotlinVersion = '1.1.0'
   }
   repositories {
     mavenCentral()
@@ -38,6 +38,10 @@ subprojects {
     main.java.srcDirs += 'src/main/kotlin'
   }
 
+  compileKotlin {
+    kotlinOptions.jvmTarget = '1.8'
+  }
+
   modifyPom {
     project {
       name 'Ratpack kotlin dsl library'
@@ -73,5 +77,5 @@ subprojects {
 apply from: 'dependencies.gradle'
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '3.3'
+  gradleVersion = '3.4'
 }

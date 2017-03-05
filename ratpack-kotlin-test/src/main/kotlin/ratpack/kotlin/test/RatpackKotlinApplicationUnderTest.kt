@@ -4,12 +4,13 @@ import ratpack.server.RatpackServer
 import ratpack.test.ApplicationUnderTest
 import java.net.URI
 
-class RatpackKotlinApplicationUnderTest(val server: RatpackServer) : RatpackServer by server, ApplicationUnderTest {
+// TODO extend RatpackServer to get at registry
+class RatpackKotlinApplicationUnderTest(val delegate: RatpackServer) : RatpackServer by delegate, ApplicationUnderTest {
 
   override fun getAddress(): URI {
-    if (!server.isRunning) {
-      server.start()
+    if (!delegate.isRunning) {
+      delegate.start()
     }
-    return URI(server.scheme, null, server.bindHost, server.bindPort, "/", null, null)
+    return URI(delegate.scheme, null, delegate.bindHost, delegate.bindPort, "/", null, null)
   }
 }
