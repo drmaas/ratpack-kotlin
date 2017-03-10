@@ -36,11 +36,11 @@ class KChain(val delegate: Chain) {
 
   fun all(cb: KContext.() -> Unit): KChain = KChain(delegate.all { KContext(it).cb() })
   fun all(handler: Handler): KChain = KChain(delegate.all(handler))
-  fun all(handler: Class<Handler>): KChain = KChain(delegate.all(handler))
+  fun all(handler: Class<out Handler>): KChain = KChain(delegate.all(handler))
 
   fun path(path: String = "", cb: KContext.() -> Unit): KChain = KChain(delegate.path(path) { KContext(it).cb() })
   fun path(path: String = "", handler: Handler): KChain = KChain(delegate.path(path, handler))
-  fun path(path: String = "", handler: Class<Handler>): KChain = KChain(delegate.path(path, handler))
+  fun path(path: String = "", handler: Class<out Handler>): KChain = KChain(delegate.path(path, handler))
 
   fun host(hostName: String, cb: KChain.() -> Unit): KChain = KChain(delegate.host(hostName) { KChain(it).cb() })
   fun host(path: String = "", action: Action<in Chain>): KChain = KChain(delegate.host(path, action))
@@ -65,27 +65,27 @@ class KChain(val delegate: Chain) {
   @Suppress("ReplaceGetOrSet")
   fun get(path: String = "", cb: KContext.() -> Unit): KChain = KChain(delegate.get(path) { KContext(it).cb() })
   fun get(path: String = "", handler: Handler): KChain = KChain(delegate.get(path, handler))
-  fun get(path: String = "", handler: Class<Handler>): KChain = KChain(delegate.get(path, handler))
+  fun get(path: String = "", handler: Class<out Handler>): KChain = KChain(delegate.get(path, handler))
 
   fun put(path: String = "", cb: KContext.() -> Unit): KChain = KChain(delegate.put(path) { KContext(it).cb() })
   fun put(path: String = "", handler: Handler): KChain = KChain(delegate.put(path, handler))
-  fun put(path: String = "", handler: Class<Handler>): KChain = KChain(delegate.put(path, handler))
+  fun put(path: String = "", handler: Class<out Handler>): KChain = KChain(delegate.put(path, handler))
 
   fun post(path: String = "", cb: KContext.() -> Unit): KChain = KChain(delegate.post(path) { KContext(it).cb() })
   fun post(path: String = "", handler: Handler): KChain = KChain(delegate.post(path, handler))
-  fun post(path: String = "", handler: Class<Handler>): KChain = KChain(delegate.post(path, handler))
+  fun post(path: String = "", handler: Class<out Handler>): KChain = KChain(delegate.post(path, handler))
 
   fun delete(path: String = "", cb: KContext.() -> Unit): KChain = KChain(delegate.delete(path) { KContext(it).cb() })
   fun delete(path: String = "", handler: Handler): KChain = KChain(delegate.delete(path, handler))
-  fun delete(path: String = "", handler: Class<Handler>): KChain = KChain(delegate.delete(path, handler))
+  fun delete(path: String = "", handler: Class<out Handler>): KChain = KChain(delegate.delete(path, handler))
 
   fun options(path: String = "", cb: KContext.() -> Unit): KChain = KChain(delegate.options(path) { KContext(it).cb() })
   fun options(path: String = "", handler: Handler): KChain = KChain(delegate.options(path, handler))
-  fun options(path: String = "", handler: Class<Handler>): KChain = KChain(delegate.options(path, handler))
+  fun options(path: String = "", handler: Class<out Handler>): KChain = KChain(delegate.options(path, handler))
 
   fun patch(path: String = "", cb: KContext.() -> Unit): KChain = KChain(delegate.patch(path) { KContext(it).cb() })
   fun patch(path: String = "", handler: Handler): KChain = KChain(delegate.patch(path, handler))
-  fun patch(path: String = "", handler: Class<Handler>): KChain = KChain(delegate.patch(path, handler))
+  fun patch(path: String = "", handler: Class<out Handler>): KChain = KChain(delegate.patch(path, handler))
 
   fun onlyIf(test: Predicate<in Context>, cb: KContext.() -> Unit): KChain = KChain(delegate.onlyIf(test, KHandlers.from(cb)))
   fun onlyIf(test: Predicate<in Context>, handler: Handler): KChain = KChain(delegate.onlyIf(test, handler))
