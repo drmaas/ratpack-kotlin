@@ -1,8 +1,7 @@
 dependencies {
-  compile commonDependencies.ratpack
+  compile commonDependencies.ratpackRx
   compile commonDependencies.kotlin
   compile commonDependencies.kotlinReflect
-  compile commonDependencies.jacksonKotlin
 
   testCompile project(':ratpack-kotlin-test')
   testCompile commonDependencies.kotlinTest

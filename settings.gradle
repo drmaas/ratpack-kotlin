@@ -1,1 +1,1 @@
-include 'ratpack-kotlin-dsl', 'ratpack-kotlin-test'
+include 'ratpack-kotlin-dsl', 'ratpack-kotlin-rx', 'ratpack-kotlin-test'
