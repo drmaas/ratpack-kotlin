@@ -4,7 +4,9 @@
 
 [![forthebadge](https://forthebadge.com/images/badges/uses-badges.svg)](https://forthebadge.com)
 
-Build fluent kotlin ratpack applications.
+Build fluent kotlin ratpack applications. Features:
+* Server, Chain, and Handler DSL
+* RxJava extension functions via (RxRatpackKotlin.kt)
 
 ## Usage
 
