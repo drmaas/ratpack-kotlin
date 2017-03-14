@@ -35,17 +35,17 @@ abstract class KChainAction : Action<Chain> {
   fun getServerConfig(): ServerConfig = dg().serverConfig
 
   //prefix
-  fun prefix(path: String = "", cb: KChain.() -> Unit): KChain = dg().prefix(path, cb)
+  inline fun prefix(path: String = "", crossinline cb: KChain.() -> Unit): KChain = dg().prefix(path, cb)
   fun prefix(path: String = "", action: Action<in Chain>): KChain = dg().prefix(path, action)
   fun prefix(path: String = "", action: Class<out Action<in Chain>>): KChain = dg().prefix(path, action)
 
   //all
-  fun all(cb: KContext.() -> Unit): KChain = dg().all(cb)
+  inline fun all(crossinline cb: KContext.() -> Unit): KChain = dg().all(cb)
   fun all(handler: Handler): KChain = dg().all(handler)
   fun all(handler: Class<Handler>): KChain = dg().all(handler)
 
   //path
-  fun path(path: String = "", cb: KContext.() -> Unit): KChain = dg().path(path, cb)
+  inline fun path(path: String = "", crossinline cb: KContext.() -> Unit): KChain = dg().path(path, cb)
   fun path(path: String = "", handler: Handler): KChain = dg().path(path, handler)
   fun path(path: String = "", handler: Class<Handler>): KChain = dg().path(path, handler)
 
@@ -54,52 +54,52 @@ abstract class KChainAction : Action<Chain> {
   fun chain(action: Class<out Action<in Chain>>): Handler = dg().chain(action)
 
   //get
-  fun get(path: String = "", cb: KContext.() -> Unit): KChain = dg().get(path, cb)
+  inline fun get(path: String = "", crossinline cb: KContext.() -> Unit): KChain = dg().get(path, cb)
   fun get(path: String = "", handler: Handler): KChain = dg().get(path, handler)
   fun get(path: String = "", handler: Class<Handler>): KChain = dg().get(path, handler)
 
   //put
-  fun put(path: String = "", cb: KContext.() -> Unit): KChain = dg().put(path, cb)
+  inline fun put(path: String = "", crossinline cb: KContext.() -> Unit): KChain = dg().put(path, cb)
   fun put(path: String = "", handler: Handler): KChain = dg().put(path, handler)
   fun put(path: String = "", handler: Class<Handler>): KChain = dg().put(path, handler)
 
   //post
-  fun post(path: String = "", cb: KContext.() -> Unit): KChain = dg().post(path, cb)
+  inline fun post(path: String = "", crossinline cb: KContext.() -> Unit): KChain = dg().post(path, cb)
   fun post(path: String = "", handler: Handler): KChain = dg().post(path, handler)
   fun post(path: String = "", handler: Class<Handler>): KChain = dg().post(path, handler)
 
   //delete
-  fun delete(path: String = "", cb: KContext.() -> Unit): KChain = dg().delete(path, cb)
+  inline fun delete(path: String = "", crossinline cb: KContext.() -> Unit): KChain = dg().delete(path, cb)
   fun delete(path: String = "", handler: Handler): KChain = dg().delete(path, handler)
   fun delete(path: String = "", handler: Class<Handler>): KChain = dg().delete(path, handler)
 
   //patch
-  fun patch(path: String = "", cb: KContext.() -> Unit): KChain = dg().patch(path, cb)
+  inline fun patch(path: String = "", crossinline cb: KContext.() -> Unit): KChain = dg().patch(path, cb)
   fun patch(path: String = "", handler: Handler): KChain = dg().patch(path, handler)
   fun patch(path: String = "", handler: Class<Handler>): KChain = dg().patch(path, handler)
 
   //options
-  fun options(path: String = "", cb: KContext.() -> Unit): KChain = dg().options(path, cb)
+  inline fun options(path: String = "", crossinline cb: KContext.() -> Unit): KChain = dg().options(path, cb)
   fun options(path: String = "", handler: Handler): KChain = dg().options(path, handler)
   fun options(path: String = "", handler: Class<Handler>): KChain = dg().options(path, handler)
 
   //fileSystem
-  fun fileSystem(path: String = "", cb: KChain.() -> Unit): KChain = dg().fileSystem(path, cb)
+  inline fun fileSystem(path: String = "", crossinline cb: KChain.() -> Unit): KChain = dg().fileSystem(path, cb)
   fun fileSystem(path: String = "", action: Action<in Chain>): KChain = dg().fileSystem(path, action)
   fun fileSystem(path: String = "", action: Class<out Action<in Chain>>): KChain = dg().fileSystem(path, action)
 
   //files
-  fun files(cb: FileHandlerSpec.() -> Unit): KChain = dg().files(cb)
+  inline fun files(crossinline cb: FileHandlerSpec.() -> Unit): KChain = dg().files(cb)
   fun files(): KChain = dg().files()
   fun files(action: Action<in FileHandlerSpec>): KChain = dg().files(action)
 
   //host
-  fun host(hostName: String, cb: KChain.() -> Unit): KChain = dg().host(hostName, cb)
+  inline fun host(hostName: String, crossinline cb: KChain.() -> Unit): KChain = dg().host(hostName, cb)
   fun host(hostName: String, action: Action<in Chain>): KChain = dg().host(hostName, action)
   fun host(hostName: String, action: Class<out Action<in Chain>>): KChain = dg().host(hostName, action)
 
   //insert
-  fun insert(cb: KChain.() -> Unit): KChain = dg().insert(cb)
+  inline fun insert(crossinline cb: KChain.() -> Unit): KChain = dg().insert(cb)
   fun insert(action: Action<in Chain>): KChain = dg().insert(action)
   fun insert(action: Class<out Action<in Chain>>): KChain = dg().insert(getRegistry().get(action))
 
@@ -114,16 +114,15 @@ abstract class KChainAction : Action<Chain> {
   fun register(registry: Registry, action: Class<out Action<in Chain>>): KChain = dg().register(registry, action)
   fun register(registryAction: Action<in RegistrySpec>, chainAction: Action<in Chain>): KChain = dg().register(registryAction, chainAction)
   fun register(registryAction: Action<in RegistrySpec>, chainAction: Class<out Action<in Chain>>): KChain = dg().register(registryAction, chainAction)
-  fun register(registryAction: RegistrySpec.() -> Unit, cb: KChain.() -> Unit): KChain = dg().register(registryAction, cb)
-  fun register(registry: Registry, cb: KChain.() -> Unit): KChain = dg().register(registry, cb)
-  fun register(registryAction: RegistrySpec.() -> Unit): KChain = dg().register(registryAction)
+  inline fun register(crossinline registryAction: RegistrySpec.() -> Unit, crossinline cb: KChain.() -> Unit): KChain = dg().register(registryAction, cb)
+  inline fun register(registry: Registry, crossinline cb: KChain.() -> Unit): KChain = dg().register(registry, cb)
+  inline fun register(crossinline registryAction: RegistrySpec.() -> Unit): KChain = dg().register(registryAction)
 
   //when
-  fun `when`(test: Predicate<in Context>, cb: KChain.() -> Unit): KChain = dg().`when`(test, cb)
-
+  inline fun `when`(test: Predicate<in Context>, crossinline cb: KChain.() -> Unit): KChain = dg().`when`(test, cb)
   fun `when`(test: Predicate<in Context>, action: Action<in Chain>): KChain = dg().`when`(test, action)
   fun `when`(test: Predicate<in Context>, action: Class<out Action<in Chain>>): KChain = dg().`when`(test, action)
-  fun `when`(test: Boolean, cb: KChain.() -> Unit): KChain = dg().`when`(test, cb)
+  inline fun `when`(test: Boolean, crossinline cb: KChain.() -> Unit): KChain = dg().`when`(test, cb)
   fun `when`(test: Boolean, action: Action<in Chain>): KChain = dg().`when`(test, action)
   fun `when`(test: Boolean, action: Class<out Action<in Chain>>): KChain = dg().`when`(test, action)
 

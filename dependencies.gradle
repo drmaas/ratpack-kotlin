@@ -9,6 +9,7 @@ ext {
 
   commonDependencies = [
     ratpack      : "io.ratpack:ratpack-guice:${commonVersions.ratpack}",
+    ratpackRx    : "io.ratpack:ratpack-rx:${commonVersions.ratpack}",
     kotlin       : "org.jetbrains.kotlin:kotlin-stdlib:${commonVersions.kotlin}",
     kotlinReflect: "org.jetbrains.kotlin:kotlin-reflect:${commonVersions.kotlin}",
     jacksonKotlin: "com.fasterxml.jackson.module:jackson-module-kotlin:${commonVersions.jacksonKotlin}",
