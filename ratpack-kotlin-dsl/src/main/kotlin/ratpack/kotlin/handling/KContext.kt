@@ -13,12 +13,12 @@ import java.time.format.DateTimeFormatter
 class KContext (val delegate: Context) : Context by delegate {
     fun httpDate (date: LocalDateTime) = DateTimeFormatter.RFC_1123_DATE_TIME.format(ZonedDateTime.of(date, ZoneId.of("GMT")))
 
-    fun byContent (cb: ByContentSpec.() -> Unit) = delegate.byContent { it.cb() }
-    fun byMethod (cb: ByMethodSpec.() -> Unit) = delegate.byMethod { it.cb() }
+    inline fun byContent (crossinline cb: ByContentSpec.() -> Unit) = delegate.byContent { it.cb() }
+    inline fun byMethod (crossinline cb: ByMethodSpec.() -> Unit) = delegate.byMethod { it.cb() }
 
-    fun withBody(cb: TypedData.() -> Unit) = request.body.then { it.cb() }
+    inline fun withBody(crossinline cb: TypedData.() -> Unit) = request.body.then { it.cb() }
 
-    fun withForm(cb: Form.() -> Unit) = context.parse(Form::class.java).then { it.cb() }
+    inline fun withForm(crossinline cb: Form.() -> Unit) = context.parse(Form::class.java).then { it.cb() }
 
     fun send (body: String = "", status: Int = 200) {
         response.status (status)

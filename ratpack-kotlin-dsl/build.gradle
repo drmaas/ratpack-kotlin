@@ -1,5 +1,6 @@
 dependencies {
   compile commonDependencies.ratpack
+  compile commonDependencies.ratpackRx
   compile commonDependencies.kotlin
   compile commonDependencies.kotlinReflect
   compile commonDependencies.jacksonKotlin
