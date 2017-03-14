@@ -6,7 +6,7 @@
 
 Build fluent kotlin ratpack applications. Features:
 * Server, Chain, and Handler DSL
-* RxJava extension functions via (RxRatpackKotlin.kt)
+* RxJava extension functions via [RxRatpackKotlin.kt]
 
 ## Usage
 
