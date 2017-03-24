@@ -1,0 +1,9 @@
+dependencies {
+  compile commonDependencies.ratpackRx2
+  compile commonDependencies.kotlin
+  compile commonDependencies.kotlinReflect
+
+  testCompile project(':ratpack-kotlin-test')
+  testCompile commonDependencies.kotlinTest
+  testCompile commonDependencies.logback
+}

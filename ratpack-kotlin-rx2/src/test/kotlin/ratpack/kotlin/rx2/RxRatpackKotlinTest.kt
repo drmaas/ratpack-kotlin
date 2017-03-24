@@ -1,4 +1,4 @@
-package ratpack.kotlin.rx
+package ratpack.kotlin.rx2
 
 import io.kotlintest.specs.BehaviorSpec
 import ratpack.exec.Promise
