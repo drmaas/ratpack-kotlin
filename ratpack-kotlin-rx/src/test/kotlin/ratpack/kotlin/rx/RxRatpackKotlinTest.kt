@@ -1,19 +1,17 @@
 package ratpack.kotlin.rx
 
+import io.kotlintest.matchers.shouldEqual
 import io.kotlintest.specs.BehaviorSpec
 import ratpack.exec.Promise
-import ratpack.kotlin.test.RatpackKotlinApplicationUnderTest
-import ratpack.kotlin.test.ratpack
-import ratpack.test.http.TestHttpClient
+import ratpack.kotlin.test.embed.ratpack
+import ratpack.kotlin.test.testHttpClient
 
 class RxRatpackKotlinTest : BehaviorSpec() {
-
-  var app: RatpackKotlinApplicationUnderTest? = null
 
   init {
     // test all with a closure
     given("a ratpack server") {
-      app = ratpack {
+      val app = ratpack {
         serverConfig {
           port(8080)
         }
@@ -29,14 +27,14 @@ class RxRatpackKotlinTest : BehaviorSpec() {
         }
       }
       `when`("a request is made to an all closure") {
-        val client = TestHttpClient.testHttpClient(app)
+        val client = testHttpClient(app)
         val r = client.get("")
         then("it works") {
           r.statusCode shouldEqual 200
           r.body.text shouldEqual "hello"
         }
       }
-      app?.stop()
+      app.close()
     }
   }
 }

@@ -1,11 +1,11 @@
 ext {
   commonVersions = [
-    kotlin       : '1.1.0',
-    ratpack      : '1.4.5',
-    ratpackRx2   : '0.2.0',
+    kotlin       : '1.1.1',
+    ratpack      : '1.4.6',
+    ratpackRx2   : '0.3.0',
     jacksonKotlin: '2.9.0.pr1',
     logback      : '1.2.1',
-    kotlinTest   : '1.3.7'
+    kotlinTest   : '2.0.0'
   ]
 
   commonDependencies = [

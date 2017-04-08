@@ -1,17 +1,15 @@
 package ratpack.kotlin.handling
 
+import io.kotlintest.matchers.shouldEqual
 import io.kotlintest.specs.BehaviorSpec
+import ratpack.kotlin.test.embed.ratpack
 import ratpack.test.http.TestHttpClient.testHttpClient
-import ratpack.kotlin.test.ratpack
 
 class RatpackTest : BehaviorSpec() {
   init {
     // ratpack top-level dsl test
     given("a ratpack server") {
       val app = ratpack {
-        serverConfig {
-          port(8080)
-        }
         bindings {
           bindInstance("string")
         }
@@ -27,7 +25,7 @@ class RatpackTest : BehaviorSpec() {
         then("it works") {
           r.statusCode shouldEqual 200
           r.body.text shouldEqual "hello"
-          app.stop()
+          app.close()
         }
       }
     }
