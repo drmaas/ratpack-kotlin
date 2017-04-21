@@ -1,0 +1,62 @@
+= ratpack-kotlin-dsl
+
+This is a dsl that aims to provide for kotlin developers what the ratpack groovy dsl provides for groovy developers.
+See the https://ratpack.io/manual/current/groovy.html[ratpack groovy docs] for details.
+
+== Main Application
+
+```kotlin
+fun main(args: Array<String>) {
+  ratpack {
+    serverConfig {
+      development(true)
+      port(9000)
+    }
+    bindings {
+      bindInstance("foobar")
+    }
+    handlers {
+      get("test") {
+        render("hello " + context.get(String::class.java))
+      }
+    }
+  }
+}
+```
+then
+```
+curl localhost:9000/test
+```
+
+== Handler Chain
+
+```kotlin
+class SampleChain : KChainAction() {
+  override fun execute() {
+    get("test") {
+      render("hello")
+    }
+  }
+}
+```
+```kotlin
+fun main(args: Array<String>) {
+  ratpack {
+    bindings {
+      bindInstance(SampleChain())
+    }
+    handlers {
+      prefix("v1",SampleChain::class.java)
+    }
+  }
+  `when`("a request is made") {
+    val client = testHttpClient(app)
+    val r = client.get("v1/test")
+    then("it works") {
+      r.statusCode shouldEqual 200
+      r.body.text shouldEqual "hello"
+      app.close()
+    }
+  }
+}
+```

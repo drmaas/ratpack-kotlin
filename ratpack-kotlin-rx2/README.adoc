@@ -1,0 +1,110 @@
+= ratpack-kotlin-rx
+
+RxJava2 extension functions for Ratpack. Many methods are provided to convert back and forth between
+promises and Observables and Flowables. A few are listed below.
+
+== Promise to Observable
+
+```kotlin
+ratpack {
+  serverConfig {
+    port(8080)
+  }
+  bindings {
+    initialize()
+  }
+  handlers {
+    all {
+      promise("hello").observe().subscribe {
+        render(it)
+      }
+    }
+  }
+}
+
+fun promise(s: String): Promise<String> {
+  return Promise.async {
+    it.success(s)
+  }
+}
+```
+
+== Promise to Flowable
+
+```kotlin
+ratpack {
+  serverConfig {
+    port(8080)
+  }
+  bindings {
+    initialize()
+  }
+  handlers {
+    all {
+      promise("hello").flow(BackpressureStrategy.BUFFER).subscribe {
+        render(it)
+      }
+    }
+  }
+}
+
+fun promise(s: String): Promise<String> {
+  return Promise.async {
+    it.success(s)
+  }
+}
+```
+
+== Observable to Promise
+
+```kotlin
+ratpack {
+  serverConfig {
+    port(8080)
+  }
+  bindings {
+    initialize()
+  }
+  handlers {
+    all {
+      observable("hello").promiseSingle().then {
+        render(it)
+      }
+    }
+  }
+}
+
+fun observable(s: String): Observable<String> {
+  return Observable.create { e ->
+    e.onNext(s)
+    e.onComplete()
+  }
+}
+```
+
+== Flowable to Promise
+
+```kotlin
+ratpack {
+  serverConfig {
+    port(8080)
+  }
+  bindings {
+    initialize()
+  }
+  handlers {
+    all {
+      flowable("hello").promiseSingle().then {
+        render(it)
+      }
+    }
+  }
+}
+
+fun flowable(s: String): Flowable<String> {
+  return Flowable.create({ e ->
+    e.onNext(s)
+    e.onComplete()
+  }, BackpressureStrategy.BUFFER)
+}
+```

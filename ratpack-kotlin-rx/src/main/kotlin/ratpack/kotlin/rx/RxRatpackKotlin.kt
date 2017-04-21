@@ -25,6 +25,7 @@ fun <T, I : Iterable<T>> Promise<I>.observeEach() = RxRatpack.observeEach(this)
 
 // convert observables to promises
 fun <T> Observable<T>.promise() = RxRatpack.promise(this)
+fun <T> Observable<T>.promiseSingle() = RxRatpack.promiseSingle(this)
 fun <T> Observable.OnSubscribe<T>.promise() = RxRatpack.promise(this)
 fun <T> Observable.OnSubscribe<T>.promiseSingle() = RxRatpack.promiseSingle(this)
 

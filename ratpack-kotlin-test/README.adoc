@@ -1,0 +1,149 @@
+# ratpack-kotlin-test
+
+This is a small test library that mirrors and goes beyond java and groovy test ratpack applications.
+It provides a convenient way to spin up ratpack apps in test cases.
+
+## Embedded App
+
+```kotlin
+val embeddedApp = EmbeddedApp.of {
+  it.registryOf {
+    it.add(String::class.java, "root")
+  }
+  it.handlers {
+    it.get {
+      it.render(it.get(String::class.java))
+    }
+  }
+}
+val kotlinApp = KotlinEmbeddedApp.from(embeddedApp)
+kotlinApp.test {
+  text shouldBe "root"
+}
+```
+or
+```kotlin
+ratpack {
+  bindings {
+    bindInstance(String::class.java, "root")
+  }
+  handlers {
+    get {
+      render(get(String::class.java))
+    }
+  }
+}.test {
+  text shouldBe "root"
+}
+```
+or
+```kotlin
+fromServer(ServerConfig.of { it.port(9999) }) {
+  bindings {
+    bindInstance(String::class.java, "root")
+  }
+  handlers {
+    get {
+      render(get(String::class.java))
+    }
+  }
+}.test {
+  text shouldBe "root"
+}
+```
+or
+```kotlin
+fromHandler {
+  render("root")
+}.test {
+  text shouldBe "root"
+}
+```
+or
+```
+fromHandlers {
+  get {
+    render("root")
+  }
+}.test {
+  text shouldBe "root"
+}
+```
+
+## Application Under Test
+
+### Test Against Local Applications
+
+```kotlin
+class SampleApp {
+  companion object {
+    @JvmStatic
+    fun main(args: Array<String>) {
+      ratpack {
+        serverConfig {
+          port(8080)
+        }
+        handlers {
+          get {
+            render("foo")
+          }
+        }
+      }
+    }
+  }
+}
+
+val aut = kotlinApplicationUnderTest(SampleApp::class)
+val client = testHttpClient(aut)
+val response = client.get()
+response.statusCode shouldEqual 200
+response.body.text shouldEqual "foo"
+aut.close()
+```
+or
+```kotlin
+fun sampleApp(): RatpackServer {
+  return ratpack {
+    serverConfig {
+      port(8080)
+    }
+    handlers {
+      get {
+        render("foo")
+      }
+    }
+  }.server
+}
+
+val aut = kotlinApplicationUnderTest(sampleApp())
+val client = testHttpClient(aut)
+val response = client.get()
+response.statusCode shouldEqual 200
+response.body.text shouldEqual "foo"
+aut.close()
+```
+
+### Test Against Remote Applications
+```
+fun sampleApp(): RatpackServer {
+  return ratpack {
+    serverConfig {
+      port(8080)
+    }
+    handlers {
+      get {
+        render("foo")
+      }
+    }
+  }.server
+}
+
+val app = sampleApp()
+app.start() // not needed for a truly remote app
+val aut = kotlinApplicationUnderTest("${app.scheme}://${app.bindHost}:${app.bindPort}")
+val client = testHttpClient(aut)
+val response = client.get()
+response.statusCode shouldEqual 200
+response.body.text shouldEqual "foo"
+app.stop() // not needed for a truly remote app
+```
