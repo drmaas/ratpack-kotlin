@@ -1,6 +1,5 @@
 ext {
   commonVersions = [
-    kotlin       : '1.1.1',
     ratpack      : '1.4.6',
     ratpackRx2   : '0.3.0',
     jacksonKotlin: '2.9.0.pr1',
@@ -12,8 +11,7 @@ ext {
     ratpack      : "io.ratpack:ratpack-guice:${commonVersions.ratpack}",
     ratpackRx    : "io.ratpack:ratpack-rx:${commonVersions.ratpack}",
     ratpackRx2   : "me.drmaas:ratpack-rx2:${commonVersions.ratpackRx2}",
-    kotlin       : "org.jetbrains.kotlin:kotlin-stdlib:${commonVersions.kotlin}",
-    kotlinReflect: "org.jetbrains.kotlin:kotlin-reflect:${commonVersions.kotlin}",
+    kotlinReflect: "org.jetbrains.kotlin:kotlin-reflect",
     jacksonKotlin: "com.fasterxml.jackson.module:jackson-module-kotlin:${commonVersions.jacksonKotlin}",
     ratpackTest  : "io.ratpack:ratpack-test:${commonVersions.ratpack}",
     kotlinTest   : "io.kotlintest:kotlintest:${commonVersions.kotlinTest}",
