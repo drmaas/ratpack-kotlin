@@ -1,7 +1,7 @@
 ext {
   commonVersions = [
     ratpack      : '1.4.6',
-    ratpackRx2   : '0.3.0',
+    ratpackRx2   : '0.4.0',
     jacksonKotlin: '2.9.0.pr1',
     logback      : '1.2.1',
     kotlinTest   : '2.0.0'
