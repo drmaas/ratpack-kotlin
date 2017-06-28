@@ -14,12 +14,31 @@ class KChainActionTest : BehaviorSpec() {
           bindInstance(SampleKChainAction())
         }
         handlers {
+          all(chain(SampleKChainAction::class.java))
           prefix("v1",SampleKChainAction::class.java)
         }
       }
-      `when`("a request is made") {
+      `when`("a request to get is made") {
         val client = testHttpClient(app)
         val r = client.get("v1/test")
+        then("it works") {
+          r.statusCode shouldEqual 200
+          r.body.text shouldEqual "hello"
+          app.close()
+        }
+      }
+      `when`("a request to get is made without prefix") {
+        val client = testHttpClient(app)
+        val r = client.get("test")
+        then("it works") {
+          r.statusCode shouldEqual 200
+          r.body.text shouldEqual "hello"
+          app.close()
+        }
+      }
+      `when`("a request to path is made") {
+        val client = testHttpClient(app)
+        val r = client.get("path")
         then("it works") {
           r.statusCode shouldEqual 200
           r.body.text shouldEqual "hello"
@@ -34,6 +53,17 @@ class SampleKChainAction : KChainAction() {
   override fun execute() {
     get("test") {
       render("hello")
+    }
+    path("path") {
+      byMethod {
+        get {
+          byContent {
+            json {
+             render("hello")
+            }
+          }
+        }
+      }
     }
   }
 }
