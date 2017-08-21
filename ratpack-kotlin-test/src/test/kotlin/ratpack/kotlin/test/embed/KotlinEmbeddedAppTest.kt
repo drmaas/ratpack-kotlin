@@ -38,7 +38,7 @@ class KotlinEmbeddedAppTest : StringSpec() {
       }
     }
     "test from server config" {
-      fromServer(ServerConfig.of { it.port(9999) }) {
+      fromServer(ServerConfig.of { it.maxHeaderSize(1024) }) {
         bindings {
           bindInstance(String::class.java, "root")
         }
