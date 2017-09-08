@@ -1,8 +1,6 @@
 package ratpack.kotlin.handling
 
 import ratpack.form.Form
-import ratpack.handling.ByContentSpec
-import ratpack.handling.ByMethodSpec
 import ratpack.handling.Context
 import ratpack.http.TypedData
 import java.time.LocalDateTime
@@ -10,26 +8,27 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-class KContext (val delegate: Context) : Context by delegate {
-    fun httpDate (date: LocalDateTime) = DateTimeFormatter.RFC_1123_DATE_TIME.format(ZonedDateTime.of(date, ZoneId.of("GMT")))
+class KContext(val delegate: Context) : Context by delegate {
+  fun httpDate(date: LocalDateTime) = DateTimeFormatter.RFC_1123_DATE_TIME.format(ZonedDateTime.of(date, ZoneId.of("GMT")))
 
-    inline fun byContent (crossinline cb: ByContentSpec.() -> Unit) = delegate.byContent { it.cb() }
-    inline fun byMethod (crossinline cb: ByMethodSpec.() -> Unit) = delegate.byMethod { it.cb() }
+  inline fun byContent(crossinline cb: KByContentSpec.(s: KByContentSpec) -> Unit) = delegate.byContent { val s = KByContentSpec(it); s.cb(s) }
 
-    inline fun withBody(crossinline cb: TypedData.() -> Unit) = request.body.then { it.cb() }
+  inline fun byMethod (crossinline cb: KByMethodSpec.(s: KByMethodSpec) -> Unit) = delegate.byMethod { val s = KByMethodSpec(it); s.cb(s) }
 
-    inline fun withForm(crossinline cb: Form.() -> Unit) = context.parse(Form::class.java).then { it.cb() }
+  inline fun withBody(crossinline cb: TypedData.(t: TypedData) -> Unit) = request.body.then { it.cb(it) }
 
-    fun send (body: String = "", status: Int = 200) {
-        response.status (status)
-        if (body == "")
-            response.send()
-        else
-            response.send(body)
-    }
+  inline fun withForm(crossinline cb: Form.(f: Form) -> Unit) = context.parse(Form::class.java).then { it.cb(it) }
 
-    fun ok (body: String = "", status: Int = 200) = send (body, status)
-    fun ok (status: Int = 200) = ok("", status)
-    fun halt (body: String = "", status: Int = 500) = send (body, status)
-    fun halt (status: Int = 500) = halt("", status)
+  fun send(body: String = "", status: Int = 200) {
+    response.status(status)
+    if (body == "")
+      response.send()
+    else
+      response.send(body)
+  }
+
+  fun ok(body: String = "", status: Int = 200) = send(body, status)
+  fun ok(status: Int = 200) = ok("", status)
+  fun halt(body: String = "", status: Int = 500) = send(body, status)
+  fun halt(status: Int = 500) = halt("", status)
 }

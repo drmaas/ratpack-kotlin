@@ -21,9 +21,9 @@ interface KotlinEmbeddedApp: EmbeddedApp {
     }
   }
 
-  fun test(cb: TestHttpClient.() -> Unit) {
+  fun test(cb: TestHttpClient.(t: TestHttpClient) -> Unit) {
     try {
-      cb.invoke(httpClient)
+      cb.invoke(httpClient, httpClient)
     } finally {
       close()
     }
@@ -54,23 +54,23 @@ interface KotlinEmbeddedApp: EmbeddedApp {
  * @param script the application definition
  * @return a  Ratpack application.
  */
-inline fun ratpack(crossinline cb: KServerSpec.() -> Unit): KotlinEmbeddedApp {
-  return from(EmbeddedApp.of { s -> KServerSpec(s).cb() })
+inline fun ratpack(crossinline cb: KServerSpec.(s: KServerSpec) -> Unit): KotlinEmbeddedApp {
+  return from(EmbeddedApp.of { val s = KServerSpec(it); s.cb(s) })
 }
 
-inline fun fromServer(serverConfig: ServerConfigBuilder, crossinline cb: KServerSpec.() -> Unit): KotlinEmbeddedApp {
-  return from(EmbeddedApp.fromServer(serverConfig.build(), { s -> KServerSpec(s).cb() }))
+inline fun fromServer(serverConfig: ServerConfigBuilder, crossinline cb: KServerSpec.(s: KServerSpec) -> Unit): KotlinEmbeddedApp {
+  return from(EmbeddedApp.fromServer(serverConfig.build(), { val s = KServerSpec(it); s.cb(s) }))
 }
 
-inline fun fromServer(serverConfig: ServerConfig, crossinline cb: KServerSpec.() -> Unit): KotlinEmbeddedApp {
-  return from(EmbeddedApp.fromServer(serverConfig, { s -> KServerSpec(s).cb() }))
+inline fun fromServer(serverConfig: ServerConfig, crossinline cb: KServerSpec.(s: KServerSpec) -> Unit): KotlinEmbeddedApp {
+  return from(EmbeddedApp.fromServer(serverConfig, { val s = KServerSpec(it); s.cb(s) }))
 }
 
-inline fun fromHandler(crossinline cb: KContext.() -> Unit): KotlinEmbeddedApp {
-  return from(EmbeddedApp.fromHandler { ctx -> KContext(ctx).cb() })
+inline fun fromHandler(crossinline cb: KContext.(c: KContext) -> Unit): KotlinEmbeddedApp {
+  return from(EmbeddedApp.fromHandler { val c = KContext(it); c.cb(c) })
 }
 
-inline fun fromHandlers(crossinline cb: KChain.() -> Unit): KotlinEmbeddedApp {
-  return from(EmbeddedApp.fromHandlers { chain -> KChain(chain).cb() })
+inline fun fromHandlers(crossinline cb: KChain.(c: KChain) -> Unit): KotlinEmbeddedApp {
+  return from(EmbeddedApp.fromHandlers { val c = KChain(it); c.cb(c) })
 }
 

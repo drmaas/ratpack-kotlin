@@ -15,7 +15,7 @@ class KChainActionTest : BehaviorSpec() {
         }
         handlers {
           all(chain(SampleKChainAction::class.java))
-          prefix("v1",SampleKChainAction::class.java)
+          prefix("v1", SampleKChainAction::class.java)
         }
       }
       `when`("a request to get is made") {
@@ -59,7 +59,7 @@ class SampleKChainAction : KChainAction() {
         get {
           byContent {
             json {
-             render("hello")
+              render("hello")
             }
           }
         }
