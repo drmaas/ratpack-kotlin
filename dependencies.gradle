@@ -3,7 +3,7 @@ ext {
     ratpack      : '1.5.0',
     ratpackRx2   : '0.5.0',
     logback      : '1.2.3',
-    kotlinTest   : '2.0.5'
+    kotlinTest   : '2.0.6'
   ]
 
   commonDependencies = [
