@@ -6,6 +6,10 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import ratpack.exec.Promise
+import ratpack.kotlin.rx2.flow
+import ratpack.kotlin.rx2.initialize
+import ratpack.kotlin.rx2.observe
+import ratpack.kotlin.rx2.promiseSingle
 import ratpack.kotlin.test.embed.ratpack
 import ratpack.kotlin.test.testHttpClient
 

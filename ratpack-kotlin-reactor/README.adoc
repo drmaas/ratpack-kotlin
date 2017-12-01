@@ -1,9 +1,9 @@
-= ratpack-kotlin-rx2
+= ratpack-kotlin-reactor
 
 RxJava2 extension functions for Ratpack. Many methods are provided to convert back and forth between
 promises and Observables and Flowables. A few are listed below.
 
-== Promise to Observable
+== Promise to Mono
 
 ```kotlin
 ratpack {
@@ -15,7 +15,7 @@ ratpack {
   }
   handlers {
     all {
-      promise("hello").observe().subscribe {
+      promise("hello").mono().subscribe {
         render(it)
       }
     }
@@ -29,7 +29,7 @@ fun promise(s: String): Promise<String> {
 }
 ```
 
-== Promise to Flowable
+== Promise to Flux
 
 ```kotlin
 ratpack {
@@ -41,7 +41,7 @@ ratpack {
   }
   handlers {
     all {
-      promise("hello").flow(BackpressureStrategy.BUFFER).subscribe {
+      promise("hello").flux().subscribe {
         render(it)
       }
     }
@@ -55,7 +55,7 @@ fun promise(s: String): Promise<String> {
 }
 ```
 
-== Observable to Promise
+== Mono to Promise
 
 ```kotlin
 ratpack {
@@ -67,22 +67,21 @@ ratpack {
   }
   handlers {
     all {
-      observable("hello").promiseSingle().then {
+      mono("hello").promiseSingle().then {
         render(it)
       }
     }
   }
 }
 
-fun observable(s: String): Observable<String> {
-  return Observable.create { e ->
-    e.onNext(s)
-    e.onComplete()
-  }
+fun mono(s: String): Mono<String> {
+  return Mono.create({ e ->
+    e.success(s)
+  })
 }
 ```
 
-== Flowable to Promise
+== Flux to Promise
 
 ```kotlin
 ratpack {
@@ -94,17 +93,17 @@ ratpack {
   }
   handlers {
     all {
-      flux("hello").promiseSingle().then {
+      flux("hello").promise().then {
         render(it)
       }
     }
   }
 }
 
-fun flux(s: String): Flowable<String> {
-  return Flowable.create({ e ->
-    e.onNext(s)
-    e.onComplete()
-  }, BackpressureStrategy.BUFFER)
+fun flux(s: String): Flux<String> {
+  return Flux.create({ e ->
+    e.next(s)
+    e.complete()
+  })
 }
 ```
