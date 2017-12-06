@@ -24,6 +24,7 @@ subprojects {
   apply plugin: "nebula.kotlin"
 //  apply plugin: "nebula.nebula-bintray"
   apply plugin: "com.bmuschko.nexus"
+  apply plugin: 'maven'
 
   repositories {
     mavenLocal()
@@ -66,5 +67,5 @@ subprojects {
 apply from: 'dependencies.gradle'
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '3.5'
+  gradleVersion = '4.4'
 }
