@@ -4,6 +4,7 @@ ext {
     ratpackRx2    : '0.5.0',
     ratpackReactor: '0.0.3',
     logback       : '1.2.3',
+    kotlin        : '1.2.0',
     kotlinTest    : '2.0.6'
   ]
 
@@ -12,7 +13,7 @@ ext {
     ratpackRx     : "io.ratpack:ratpack-rx:${commonVersions.ratpack}",
     ratpackRx2    : "me.drmaas:ratpack-rx2:${commonVersions.ratpackRx2}",
     ratpackReactor: "me.drmaas:ratpack-reactor:${commonVersions.ratpackReactor}",
-    kotlinReflect : "org.jetbrains.kotlin:kotlin-reflect",
+    kotlinReflect : "org.jetbrains.kotlin:kotlin-reflect:${commonVersions.kotlin}",
     ratpackTest   : "io.ratpack:ratpack-test:${commonVersions.ratpack}",
     kotlinTest    : "io.kotlintest:kotlintest:${commonVersions.kotlinTest}",
     logback       : "ch.qos.logback:logback-classic:${commonVersions.logback}"
