@@ -39,3 +39,11 @@ pluginBundle {
     }
   }
 }
+
+task("version") {
+  File(project.rootDir, "version.txt").printWriter().use {
+    it.print(project.version)
+  }
+}
+
+task("compile").dependsOn("version")

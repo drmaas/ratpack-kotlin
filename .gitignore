@@ -1,6 +1,7 @@
 ### Gradle
 .gradle
 build/
+version.txt
 
 # Ignore Gradle GUI config
 gradle-server.setting
