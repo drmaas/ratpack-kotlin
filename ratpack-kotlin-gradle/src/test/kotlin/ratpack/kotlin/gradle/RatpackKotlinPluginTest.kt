@@ -4,8 +4,10 @@ import io.kotlintest.matchers.shouldEqual
 import io.kotlintest.specs.BehaviorSpec
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome.SUCCESS
+import org.junit.Ignore
 import org.junit.rules.TemporaryFolder
 
+@Ignore
 class RatpackKotlinPluginTest : BehaviorSpec() {
   val testProjectDir = TemporaryFolder()
   init {
