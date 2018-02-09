@@ -39,3 +39,11 @@ pluginBundle {
     }
   }
 }
+
+task("version") {
+  File(project.projectDir.toString()+"/src/main/resources", "version.txt").printWriter().use {
+    it.print(project.version)
+  }
+}
+
+tasks.findByName ("compileKotlin")?.dependsOn("version")
