@@ -25,7 +25,7 @@ class RatpackKotlinPlugin : Plugin<Project> {
       val application = convention.findPlugin(ApplicationPluginConvention::class.java)
       application?.mainClassName = "ratpack.kotlin.runner.KotlinDslRunner"
 
-      val pluginVersion = buildscript.configurations.first().allDependencies.first { it.name == "ratpack-kotlin-gradle" }.version ?: throw IllegalArgumentException("Missing ratpack-kotlin-gradle dependency version")
+      val pluginVersion = RatpackKotlinPlugin::class.java.classLoader.getResource("version.txt").readText().trim()
 
       val ratpackKotlinExtension = RatpackKotlinExtension(project, pluginVersion) // this is just used to add dependencies
 
