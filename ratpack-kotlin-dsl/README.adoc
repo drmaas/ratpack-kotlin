@@ -5,6 +5,67 @@ See the https://ratpack.io/manual/current/groovy.html[ratpack groovy docs] for d
 
 == Main Application
 
+=== Via Kotlin Script
+
+Create src/ratpack/ratpack.kts
+```kotlin
+import ratpack.kotlin.handling.ratpack
+
+ratpack {
+  serverConfig {
+    development(true)
+    port(9000)
+  }
+  bindings {
+    bindInstance("foobar")
+  }
+  handlers {
+    get("test") {
+      render("hello " + context.get(String::class.java))
+    }
+  }
+}
+```
+
+Create build.gradle.kts
+```
+plugins {
+  id("me.drmaas.ratpack-kotlin") version "1.3.0"
+  id("com.github.johnrengelman.shadow") version "2.0.2"
+}
+
+repositories {
+  mavenLocal()
+  jcenter()
+}
+
+dependencies {
+  runtime("ch.qos.logback:logback-classic:1.2.3")
+}
+
+group = "com.example"
+version = "0.0.1"
+```
+
+Run gradle
+```
+gradle run
+```
+
+Or build a jar and run
+```
+gradle shadowJar
+java -jar build/libs/your-app-all.jar
+```
+
+then
+```
+curl localhost:9000/test
+```
+
+=== Via Main Method
+
+Create a main class
 ```kotlin
 fun main(args: Array<String>) {
   ratpack {
@@ -23,6 +84,17 @@ fun main(args: Array<String>) {
   }
 }
 ```
+
+Create build.gradle
+```
+... some gradle goes goes ...
+```
+
+Run gradle
+```
+gradle run
+```
+
 then
 ```
 curl localhost:9000/test

@@ -8,7 +8,8 @@
 //  }
 //}
 plugins {
-  id("me.drmaas.ratpack-kotlin") version "1.2.0-rc.4"
+  id("me.drmaas.ratpack-kotlin") version "1.2.0-rc.5"
+  id("com.github.johnrengelman.shadow") version "2.0.2"
 }
 
 repositories {
