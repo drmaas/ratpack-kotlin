@@ -144,7 +144,7 @@ class SampleChain : KChainAction() {
 ```
 ```kotlin
 fun main(args: Array<String>) {
-  ratpack {
+  val app = ratpack {
     bindings {
       bindInstance(SampleChain())
     }
