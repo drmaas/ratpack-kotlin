@@ -4,16 +4,18 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath 'com.netflix.nebula:nebula-kotlin-plugin:1.2.21'
+    classpath 'com.netflix.nebula:nebula-kotlin-plugin:1.2.30'
     classpath 'com.netflix.nebula:nebula-release-plugin:4.1.1'
 //    classpath 'com.netflix.nebula:nebula-bintray-plugin:3.5.2'
     classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
     classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.5.3"
+    classpath "com.vanniktech:gradle-dependency-graph-generator-plugin:0.1.0"
   }
 }
 
-apply plugin: "nebula.nebula-release"
+apply plugin: 'nebula.nebula-release'
 apply plugin: 'io.codearte.nexus-staging'
+apply plugin: 'com.vanniktech.dependency.graph.generator'
 
 allprojects {
   group = 'me.drmaas'
@@ -67,5 +69,5 @@ subprojects {
 apply from: 'dependencies.gradle'
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '4.5.1'
+  gradleVersion = '4.6'
 }
