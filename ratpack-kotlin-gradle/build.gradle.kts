@@ -19,7 +19,7 @@ dependencies {
   compile(gradleApi())
   // other dependencies that your plugin requires
   compile("io.ratpack:ratpack-gradle:1.5.1")
-  compile("com.netflix.nebula:nebula-kotlin-plugin:1.2.21")
+  compile("com.netflix.nebula:nebula-kotlin-plugin:${(ext["commonVersions"] as Map<String, String>)["kotlin"]}")
 
   testCompile("io.kotlintest:kotlintest:2.0.7")
 }
