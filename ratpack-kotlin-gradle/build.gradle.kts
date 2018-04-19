@@ -18,10 +18,10 @@ apply {
 dependencies {
   compile(gradleApi())
   // other dependencies that your plugin requires
-  compile("io.ratpack:ratpack-gradle:1.5.1")
+  compile("io.ratpack:ratpack-gradle:${(ext["commonVersions"] as Map<String, String>)["ratpack"]}")
   compile("com.netflix.nebula:nebula-kotlin-plugin:${(ext["commonVersions"] as Map<String, String>)["kotlin"]}")
 
-  testCompile("io.kotlintest:kotlintest:2.0.7")
+  testCompile("io.kotlintest:kotlintest:${(ext["commonVersions"] as Map<String, String>)["kotlinTest"]}")
 }
 
 // The configuration example below shows the minimum required properties

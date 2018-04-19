@@ -4,7 +4,7 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath 'com.netflix.nebula:nebula-kotlin-plugin:1.2.31'
+    classpath 'com.netflix.nebula:nebula-kotlin-plugin:1.2.40'
     classpath 'com.netflix.nebula:nebula-release-plugin:4.1.1'
 //    classpath 'com.netflix.nebula:nebula-bintray-plugin:3.5.2'
     classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
