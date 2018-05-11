@@ -3,6 +3,7 @@ package ratpack.kotlin.handling
 import ratpack.form.Form
 import ratpack.handling.Context
 import ratpack.http.TypedData
+import ratpack.kotlin.coroutines.async
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -31,4 +32,6 @@ class KContext(val delegate: Context) : Context by delegate {
   fun ok(status: Int = 200) = ok("", status)
   fun halt(body: String = "", status: Int = 500) = send(body, status)
   fun halt(status: Int = 500) = halt("", status)
+
+  inline fun async(noinline cb: suspend () -> Any?) = context.async(cb)
 }

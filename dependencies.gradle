@@ -4,20 +4,22 @@ ext {
     ratpackRx2    : '0.5.0',
     ratpackReactor: '0.0.8',
     logback       : '1.2.3',
-    kotlin        : '1.2.40',
-    kotlinTest    : '2.0.7'
+    kotlin        : '1.2.41',
+    coroutines    : '0.22.5',
+    kotlinTest    : '2.0.7',
   ]
 
   commonDependencies = [
-    ratpack       : "io.ratpack:ratpack-guice:${commonVersions.ratpack}",
-    ratpackRx     : "io.ratpack:ratpack-rx:${commonVersions.ratpack}",
-    ratpackRx2    : "me.drmaas:ratpack-rx2:${commonVersions.ratpackRx2}",
-    ratpackReactor: "me.drmaas:ratpack-reactor:${commonVersions.ratpackReactor}",
-    kotlinReflect : "org.jetbrains.kotlin:kotlin-reflect:${commonVersions.kotlin}",
-    kotlinScript  : "org.jetbrains.kotlin:kotlin-script-util:${commonVersions.kotlin}",
-    kotlinCompiler: "org.jetbrains.kotlin:kotlin-compiler-embeddable:${commonVersions.kotlin}",
-    ratpackTest   : "io.ratpack:ratpack-test:${commonVersions.ratpack}",
-    kotlinTest    : "io.kotlintest:kotlintest:${commonVersions.kotlinTest}",
-    logback       : "ch.qos.logback:logback-classic:${commonVersions.logback}"
+    ratpack         : "io.ratpack:ratpack-guice:${commonVersions.ratpack}",
+    ratpackRx       : "io.ratpack:ratpack-rx:${commonVersions.ratpack}",
+    ratpackRx2      : "me.drmaas:ratpack-rx2:${commonVersions.ratpackRx2}",
+    ratpackReactor  : "me.drmaas:ratpack-reactor:${commonVersions.ratpackReactor}",
+    kotlinReflect   : "org.jetbrains.kotlin:kotlin-reflect:${commonVersions.kotlin}",
+    kotlinScript    : "org.jetbrains.kotlin:kotlin-script-util:${commonVersions.kotlin}",
+    kotlinCompiler  : "org.jetbrains.kotlin:kotlin-compiler-embeddable:${commonVersions.kotlin}",
+    kotlinCoroutines: "org.jetbrains.kotlinx:kotlinx-coroutines-core:${commonVersions.coroutines}",
+    ratpackTest     : "io.ratpack:ratpack-test:${commonVersions.ratpack}",
+    kotlinTest      : "io.kotlintest:kotlintest:${commonVersions.kotlinTest}",
+    logback         : "ch.qos.logback:logback-classic:${commonVersions.logback}"
   ]
 }

@@ -1,9 +1,7 @@
 dependencies {
-  compile project(":ratpack-kotlin-coroutines")
   compile commonDependencies.ratpack
-  compile commonDependencies.kotlinScript
-  compile commonDependencies.kotlinCompiler
   compile commonDependencies.kotlinReflect
+  compile commonDependencies.kotlinCoroutines
 
   testCompile project(':ratpack-kotlin-test')
   testCompile commonDependencies.kotlinTest
