@@ -6,29 +6,47 @@ image::https://forthebadge.com/images/badges/uses-badges.svg["forthebadge", http
 
 Build fluent kotlin ratpack applications. Features:
 
-* Server, Chain, and Handler DSL
+* Server, Bindings, Chain, and Handler DSL
 
 * RxJava extension functions
 
 * RxJava2 extension functions
 
+* Reactor extension functions
+
 * Kotlin test harnessing support: `KotlinEmbeddedApp`, `kotlinApplicationUnderTest(...) and friends`
 
-All libraries are available via maven central.
+* Gradle plugin (kotlin syntax)
+```kotlin
+plugins {
+  id("me.drmaas.ratpack-kotlin") version "x.y.z"
+}
+```
+src/ratpack/ratpack.kts
+```kotlin
+import ratpack.kotlin.handling.ratpack
+
+ratpack {
+  serverConfig {
+    port(8080)
+  }
+  bindings {
+    bindInstance("string")
+  }
+  handlers {
+    get("test") {
+      render(get(String::class.java))
+    }
+  }
+}
+```
+
+All libraries are available in maven central.
 
 Gradle
 
 ```groovy
-compile 'me.drmaas:ratpack-kotlin-dsl:x.x.x'
-```
-```groovy
-compile 'me.drmaas:ratpack-kotlin-rx:x.x.x'
-```
-```groovy
-compile 'me.drmaas:ratpack-kotlin-rx2:x.x.x'
-```
-```groovy
-testCompile 'me.drmaas:ratpack-kotlin-test:x.x.x'
+compile 'me.drmaas:ratpack-kotlin-<module>:x.x.x'
 ```
 
 Maven
@@ -36,29 +54,7 @@ Maven
 ```xml
 <dependency>
   <groupId>me.drmaas</groupId>
-  <artifactId>ratpack-kotlin-dsl</artifactId>
+  <artifactId>ratpack-kotlin-<module></artifactId>
   <version>x.x.x</version>
-</dependency>
-```
-```xml
-<dependency>
-  <groupId>me.drmaas</groupId>
-  <artifactId>ratpack-kotlin-rx</artifactId>
-  <version>x.x.x</version>
-</dependency>
-```
-```xml
-<dependency>
-  <groupId>me.drmaas</groupId>
-  <artifactId>ratpack-kotlin-rx2</artifactId>
-  <version>x.x.x</version>
-</dependency>
-```
-```xml
-<dependency>
-  <groupId>me.drmaas</groupId>
-  <artifactId>ratpack-kotlin-test</artifactId>
-  <version>x.x.x</version>
-  <scope>test</scope>
 </dependency>
 ```
