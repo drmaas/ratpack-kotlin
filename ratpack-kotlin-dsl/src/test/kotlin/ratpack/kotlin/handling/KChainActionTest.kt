@@ -11,11 +11,11 @@ class KChainActionTest : BehaviorSpec() {
     given("a ratpack server") {
       val app = ratpack {
         bindings {
-          bindInstance(SampleKChainAction())
+          bind<SampleKChainAction>()
         }
         handlers {
-          all(chain(SampleKChainAction::class.java))
-          prefix("v1", SampleKChainAction::class.java)
+          all(chain<SampleKChainAction>())
+          prefix<SampleKChainAction>("v1")
         }
       }
       `when`("a request to get is made") {

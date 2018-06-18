@@ -52,7 +52,7 @@ ratpack {
   }
   handlers {
     get("test") {
-      render("hello " + context.get(String::class.java))
+      render("hello " + context.get<String>())
     }
   }
 }
@@ -146,10 +146,10 @@ class SampleChain : KChainAction() {
 fun main(args: Array<String>) {
   val app = ratpack {
     bindings {
-      bindInstance(SampleChain())
+      bind<SampleChain>()
     }
     handlers {
-      prefix("v1",SampleChain::class.java)
+      prefix<SampleChain>("v1")
     }
   }
   `when`("a request is made") {
@@ -163,3 +163,27 @@ fun main(args: Array<String>) {
   }
 }
 ```
+
+== Enhanced DSL extensions using reified types
+
+Additional Ratpack DSL extensions for Kotlin. This provides extension wrappers and extension methods for providing a
+better Guice DSL experience from Kotlin. It takes advantage of reified types to reduce class references like
+`bind(SampleChain::class.java)` to `bind<SampleChain>()`.
+```
+    ...
+    bindings {
+      bind<SampleChain>()
+    }
+    ...
+```
+or
+```
+    ...
+    handlers {
+      prefix<SampleChain>("v1")
+    }
+    ...
+```
+See all the available extension functions in `Extensions.kt`.
+
+For additional Guice-specific extensions, see https://github.com/authzee/kotlin-guice.

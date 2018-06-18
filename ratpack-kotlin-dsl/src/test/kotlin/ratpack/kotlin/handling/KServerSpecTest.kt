@@ -10,7 +10,7 @@ class KServerSpecTest : BehaviorSpec() {
     // ratpack serverConfig(action: Action<in ServerConfigBuilder>) dsl test
     given("a ratpack server") {
       val app = ratpack {
-        serverConfig(Action() {
+        serverConfig(Action {
           it.port(1234)
         })
         bindings {}
