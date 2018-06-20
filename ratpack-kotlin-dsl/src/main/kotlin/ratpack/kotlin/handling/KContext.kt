@@ -33,5 +33,5 @@ class KContext(val delegate: Context) : Context by delegate {
   fun halt(body: String = "", status: Int = 500) = send(body, status)
   fun halt(status: Int = 500) = halt("", status)
 
-  inline fun async(noinline cb: suspend () -> Any?) = context.async(cb)
+  fun async(cb: suspend () -> Any?) = context.async(cb)
 }

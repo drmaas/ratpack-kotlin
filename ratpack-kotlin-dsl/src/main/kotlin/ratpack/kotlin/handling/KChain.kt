@@ -53,10 +53,10 @@ class KChain(val delegate: Chain) {
   fun register(registry: Registry, action: Class<out Action<in Chain>>): KChain = KChain(delegate.register(registry, action))
   fun register(registryAction: Action<in RegistrySpec>, chainAction: Action<in Chain>): KChain = KChain(delegate.register(registryAction, chainAction))
   fun register(registryAction: Action<in RegistrySpec>, chainAction: Class<out Action<in Chain>>): KChain = KChain(delegate.register(registryAction, chainAction))
-  inline fun register(crossinline registryAction: RegistrySpec.(r: RegistrySpec) -> Unit, crossinline cb: KChain.(c: KChain) -> Unit): KChain = KChain(delegate.register({ val r = KRegistrySpec(it); r.registryAction(r) }, { val c = KChain(it); c.cb(c) }))
+  inline fun register(crossinline registryAction: KRegistrySpec.(r: KRegistrySpec) -> Unit, crossinline cb: KChain.(c: KChain) -> Unit): KChain = KChain(delegate.register({ val r = KRegistrySpec(it); r.registryAction(r) }, { val c = KChain(it); c.cb(c) }))
   fun register(registry: Registry): KChain = KChain(delegate.register(registry))
   inline fun register(registry: Registry, crossinline cb: KChain.(c: KChain) -> Unit): KChain = KChain(delegate.register(registry) { val c = KChain(it); c.cb(c) })
-  inline fun register(crossinline registryAction: RegistrySpec.(r: RegistrySpec) -> Unit): KChain = KChain(delegate.register { val r = KRegistrySpec(it); r.registryAction(r) })
+  inline fun register(crossinline registryAction: KRegistrySpec.(r: KRegistrySpec) -> Unit): KChain = KChain(delegate.register { val r = KRegistrySpec(it); r.registryAction(r) })
 
   fun redirect(code: Int, location: String): KChain = KChain(delegate.redirect(code, location))
 

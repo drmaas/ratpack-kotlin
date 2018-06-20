@@ -55,7 +55,7 @@ class KChainTest : BehaviorSpec() {
           bindInstance(AllHandler())
         }
         handlers {
-          all(AllHandler::class.java)
+          all<AllHandler>()
         }
       }
       `when`("a request is made to an all handler") {
