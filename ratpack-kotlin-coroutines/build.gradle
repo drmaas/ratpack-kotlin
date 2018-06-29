@@ -6,4 +6,13 @@ dependencies {
   testCompile project(':ratpack-kotlin-test')
   testCompile commonDependencies.kotlinTest
   testCompile commonDependencies.logback
+
+  testCompile "org.jetbrains.spek:spek-api:1.1.5"
+  testRuntime "org.jetbrains.spek:spek-junit-platform-engine:1.1.5"
+}
+
+test {
+  useJUnitPlatform {
+    includeEngines 'spek'
+  }
 }
