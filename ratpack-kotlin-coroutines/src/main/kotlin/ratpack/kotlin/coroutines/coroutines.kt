@@ -22,7 +22,7 @@ import ratpack.handling.Context
  *
  * @param block The block to execute
  */
-inline fun Context.async(noinline block: suspend () -> Any?) {
+fun Context.async(block: suspend () -> Any?) {
   launch(Unconfined, CoroutineStart.UNDISPATCHED) {
     try {
       block()

@@ -34,6 +34,8 @@ subprojects {
     jcenter()
   }
 
+  kotlin { experimental { coroutines 'enable' } }
+
   modifyPom {
     project {
       name 'Ratpack kotlin dsl library'
