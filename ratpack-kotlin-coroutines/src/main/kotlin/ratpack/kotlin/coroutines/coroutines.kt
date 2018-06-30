@@ -39,38 +39,6 @@ inline fun Context.async(noinline block: suspend () -> Any?) {
 suspend fun <T> await(block: () -> T): T = Blocking.get(block).await()
 
 /**
- *
- * Runs the given block on the request thread.
- *
- * Frees the request thread as soon as the first <tt>await<tt> (or any other suspendable function) is encountered and
- * continues work on another appropriate thread after the operation finishes.
- *
- * This is useful for producing multiple values in parallel, without blocking the request thread.
- *
- * @param block The block to execute
- */
-suspend fun <T> awaitAsync(block: () -> T): T = Promise.async<T> { down ->
-  launch(Unconfined, CoroutineStart.UNDISPATCHED) {
-    try {
-      down.success(block())
-    } catch (t: Throwable) {
-      down.error(t)
-    }
-  }
-}.await()
-
-/**
- * Returns the result of the [block] as soon as the computation completes. The request thread is released
- * during the operation.
- *
- *  his is useful for producing multiple values sequentially, without blocking the request thread.
- */
-suspend fun <T> awaitSync(block: () -> T): T = Promise.sync<T> {
-  block()
-}.await()
-
-
-/**
  * Resolves the promise and returns its value as soon as the blocking computation completes. The request thread is released
  * during the blocking operation.
  */
