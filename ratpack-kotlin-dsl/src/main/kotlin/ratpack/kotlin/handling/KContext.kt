@@ -12,13 +12,13 @@ import java.time.format.DateTimeFormatter
 class KContext(val delegate: Context) : Context by delegate {
   fun httpDate(date: LocalDateTime) = DateTimeFormatter.RFC_1123_DATE_TIME.format(ZonedDateTime.of(date, ZoneId.of("GMT")))
 
-  inline fun byContent(crossinline cb: KByContentSpec.(s: KByContentSpec) -> Unit) = delegate.byContent { val s = KByContentSpec(it); s.cb(s) }
+  inline fun byContent(crossinline cb: KByContentSpec.(KByContentSpec) -> Unit) = delegate.byContent { val s = KByContentSpec(it); s.cb(s) }
 
-  inline fun byMethod (crossinline cb: KByMethodSpec.(s: KByMethodSpec) -> Unit) = delegate.byMethod { val s = KByMethodSpec(it); s.cb(s) }
+  inline fun byMethod (crossinline cb: KByMethodSpec.(KByMethodSpec) -> Unit) = delegate.byMethod { val s = KByMethodSpec(it); s.cb(s) }
 
-  inline fun withBody(crossinline cb: TypedData.(t: TypedData) -> Unit) = request.body.then { it.cb(it) }
+  inline fun withBody(crossinline cb: TypedData.(TypedData) -> Unit) = request.body.then { it.cb(it) }
 
-  inline fun withForm(crossinline cb: Form.(f: Form) -> Unit) = context.parse(Form::class.java).then { it.cb(it) }
+  inline fun withForm(crossinline cb: Form.(Form) -> Unit) = context.parse(Form::class.java).then { it.cb(it) }
 
   fun send(body: String = "", status: Int = 200) {
     response.status(status)
