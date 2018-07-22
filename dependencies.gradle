@@ -4,7 +4,7 @@ ext {
     ratpackRx2    : '0.5.0',
     ratpackReactor: '0.0.8',
     logback       : '1.2.3',
-    kotlin        : '1.2.50',
+    kotlin        : '1.2.51',
     coroutines    : '0.23.3',
     kotlinTest    : '2.0.7',
   ]
