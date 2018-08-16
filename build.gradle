@@ -23,6 +23,7 @@ allprojects {
 }
 
 subprojects {
+  apply plugin: 'java-library'
   apply plugin: "nebula.kotlin"
 //  apply plugin: "nebula.nebula-bintray"
   apply plugin: "com.bmuschko.nexus"

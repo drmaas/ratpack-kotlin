@@ -1,11 +1,11 @@
 dependencies {
-  compile project(":ratpack-kotlin-coroutines")
-  compile commonDependencies.ratpack
-  compile commonDependencies.kotlinScript
-  compile commonDependencies.kotlinCompiler
-  compile commonDependencies.kotlinReflect
+  api project(":ratpack-kotlin-coroutines")
+  api commonDependencies.ratpack
+  api commonDependencies.kotlinReflect
+  implementation commonDependencies.kotlinScript
+  implementation commonDependencies.kotlinCompiler
 
-  testCompile project(':ratpack-kotlin-test')
-  testCompile commonDependencies.kotlinTest
-  testCompile commonDependencies.logback
+  testImplementation project(':ratpack-kotlin-test')
+  testImplementation commonDependencies.kotlinTest
+  testImplementation commonDependencies.logback
 }
