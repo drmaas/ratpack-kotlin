@@ -6,7 +6,8 @@ package ratpack.kotlin.coroutines
 
 import kotlinx.coroutines.experimental.CancellableContinuation
 import kotlinx.coroutines.experimental.CoroutineStart
-import kotlinx.coroutines.experimental.Unconfined
+import kotlinx.coroutines.experimental.Dispatchers.Unconfined
+import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.suspendCancellableCoroutine
 import ratpack.exec.Blocking
@@ -23,7 +24,7 @@ import ratpack.handling.Context
  * @param block The block to execute
  */
 fun Context.async(block: suspend () -> Any?) {
-  launch(Unconfined, CoroutineStart.UNDISPATCHED) {
+  GlobalScope.launch(Unconfined, CoroutineStart.UNDISPATCHED) {
     try {
       block()
     } catch (t: Throwable) {
