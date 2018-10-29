@@ -23,11 +23,12 @@ allprojects {
 }
 
 subprojects {
-  apply plugin: 'java-library'
+  apply plugin: "java-library"
   apply plugin: "nebula.kotlin"
 //  apply plugin: "nebula.nebula-bintray"
   apply plugin: "com.bmuschko.nexus"
-  apply plugin: 'maven'
+  apply plugin: "maven"
+  apply plugin: "maven-publish"
 
   repositories {
     mavenLocal()

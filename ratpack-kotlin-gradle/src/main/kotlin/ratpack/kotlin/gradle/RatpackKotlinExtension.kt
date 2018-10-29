@@ -4,7 +4,7 @@ import org.gradle.api.Project
 import org.gradle.api.artifacts.Dependency
 import org.gradle.api.artifacts.dsl.DependencyHandler
 
-class RatpackKotlinExtension(project: Project, val pluginVersion: String) {
+class RatpackKotlinExtension(project: Project, val pluginVersion: String, val kotlinVersion: String) {
 
   companion object {
     const val GROUP = "me.drmaas"
@@ -12,16 +12,14 @@ class RatpackKotlinExtension(project: Project, val pluginVersion: String) {
 
   val dependencies: DependencyHandler = project.dependencies
 
-  fun getDsl(): Dependency {
-    return dependency("dsl")
-  }
+  fun getScript() = dependencies.create("org.jetbrains.kotlin:kotlin-script-util:${kotlinVersion}")
 
-  fun getTest(): Dependency {
-    return dependency("test")
-  }
+  fun getCompiler() = dependencies.create("org.jetbrains.kotlin:kotlin-compiler-embeddable:${kotlinVersion}")
 
-  fun dependency(name: String): Dependency {
-    return dependencies.create("$GROUP:ratpack-kotlin-$name:$pluginVersion")
-  }
+  fun getDsl() = dependency("dsl")
+
+  fun getTest() = dependency("test")
+
+  fun dependency(name: String) = dependencies.create("$GROUP:ratpack-kotlin-$name:$pluginVersion")
 
 }
