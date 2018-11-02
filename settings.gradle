@@ -5,3 +5,5 @@ include 'ratpack-kotlin-dsl',
   'ratpack-kotlin-test',
   'ratpack-kotlin-gradle',
   'ratpack-kotlin-coroutines'
+
+enableFeaturePreview('STABLE_PUBLISHING')

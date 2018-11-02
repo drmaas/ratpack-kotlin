@@ -33,5 +33,6 @@ class KContext(val delegate: Context) : Context by delegate {
   fun halt(body: String = "", status: Int = 500) = send(body, status)
   fun halt(status: Int = 500) = halt("", status)
 
+  @kotlinx.coroutines.ExperimentalCoroutinesApi
   fun async(cb: suspend () -> Any?) = context.async(cb)
 }

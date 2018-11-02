@@ -13,6 +13,7 @@ private val threadName get() = "(thread: ${Thread.currentThread()}"
 /**
  * See https://github.com/gregopet/kotlin-ratpack-coroutines/blob/master/src/test/kotlin/co/petrin/kotlin/BlockingBehaviorSpec.kt
  */
+@kotlinx.coroutines.ExperimentalCoroutinesApi
 class BlockingBehaviorSpec : Spek({
   given("An embedded app with a blocking & non-blocking operation") {
     lateinit var semaphore: Semaphore

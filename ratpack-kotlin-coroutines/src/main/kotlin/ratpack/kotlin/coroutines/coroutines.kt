@@ -4,15 +4,17 @@
 
 package ratpack.kotlin.coroutines
 
-import kotlinx.coroutines.experimental.CancellableContinuation
-import kotlinx.coroutines.experimental.CoroutineStart
-import kotlinx.coroutines.experimental.Dispatchers.Unconfined
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.suspendCancellableCoroutine
+import kotlinx.coroutines.CancellableContinuation
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.Dispatchers.Unconfined
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import ratpack.exec.Blocking
 import ratpack.exec.Promise
 import ratpack.handling.Context
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 /**
  *
@@ -23,6 +25,7 @@ import ratpack.handling.Context
  *
  * @param block The block to execute
  */
+@kotlinx.coroutines.ExperimentalCoroutinesApi
 fun Context.async(block: suspend () -> Any?) {
   GlobalScope.launch(Unconfined, CoroutineStart.UNDISPATCHED) {
     try {
