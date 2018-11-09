@@ -3,22 +3,20 @@ package ratpack.kotlin.test.embed
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.StringSpec
 import ratpack.server.ServerConfig
-import ratpack.test.embed.EmbeddedApp
 
-class KotlinEmbeddedAppTest : StringSpec() {
+class KEmbeddedAppTest : StringSpec() {
   init {
     "test from" {
-      val embeddedApp = EmbeddedApp.of {
-        it.registryOf {
-          it.add(String::class.java, "root")
+      val kotlinApp = KEmbeddedApp.of {
+        bindings {
+          add(String::class.java, "root")
         }
-        it.handlers {
-          it.get {
-            it.render(it.get(String::class.java))
+        handlers {
+          get {
+            render(get(String::class.java))
           }
         }
       }
-      val kotlinApp = KotlinEmbeddedApp.from(embeddedApp)
       kotlinApp.test {
         text shouldBe "root"
       }

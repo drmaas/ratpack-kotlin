@@ -23,6 +23,7 @@ class RatpackTest : BehaviorSpec() {
         val client = testHttpClient(app)
         val r = client.get("test")
         then("it works") {
+          app.server.getRegistry().getAll<String>().toList().size shouldEqual 1
           r.statusCode shouldEqual 200
           r.body.text shouldEqual "hello"
           app.close()
