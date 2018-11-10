@@ -1,9 +1,10 @@
 package ratpack.kotlin.test
 
 import io.kotlintest.matchers.shouldEqual
+import io.kotlintest.matchers.shouldNotBe
 import io.kotlintest.specs.StringSpec
+import ratpack.kotlin.handling.KRatpackServer
 import ratpack.kotlin.test.embed.ratpack
-import ratpack.server.RatpackServer
 
 class RatpackKotlinApplicationUnderTestTest: StringSpec() {
   init {
@@ -33,6 +34,7 @@ class RatpackKotlinApplicationUnderTestTest: StringSpec() {
       val response = client.get()
       response.statusCode shouldEqual 200
       response.body.text shouldEqual "foo"
+      aut.getRegistry() shouldNotBe null
       aut.close()
     }
 
@@ -57,7 +59,7 @@ class SampleApp {
   }
 }
 
-fun sampleApp(): RatpackServer {
+fun sampleApp(): KRatpackServer {
   return ratpack {
     serverConfig {
       port(8080)

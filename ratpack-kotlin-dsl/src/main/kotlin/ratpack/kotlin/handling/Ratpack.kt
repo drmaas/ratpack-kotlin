@@ -41,9 +41,31 @@ interface KRatpackServer : RatpackServer {
 }
 
 class DefaultKRatpackServer(definitionFactory: Action<in RatpackServerSpec>, impositions: Impositions) : KRatpackServer, DefaultRatpackServer(definitionFactory, impositions) {
+  init {
+    KServerCapturer.capture(this)
+  }
 
-   override fun getRegistry(): Registry {
+  override fun getRegistry(): Registry {
     return serverRegistry
+  }
+
+}
+
+object KServerCapturer {
+
+  private val SERVER_HOLDER = ThreadLocal<KRatpackServer>()
+
+  fun capture(bootstrap: () -> Unit): KRatpackServer {
+    try {
+      bootstrap()
+      return SERVER_HOLDER.get()
+    } finally {
+      SERVER_HOLDER.remove()
+    }
+  }
+
+  fun capture(server: KRatpackServer) {
+    SERVER_HOLDER.set(server)
   }
 
 }
