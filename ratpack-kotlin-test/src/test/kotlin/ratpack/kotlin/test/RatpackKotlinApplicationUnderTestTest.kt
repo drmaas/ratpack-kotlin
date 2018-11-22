@@ -3,8 +3,8 @@ package ratpack.kotlin.test
 import io.kotlintest.matchers.shouldEqual
 import io.kotlintest.matchers.shouldNotBe
 import io.kotlintest.specs.StringSpec
-import ratpack.kotlin.handling.KRatpackServer
 import ratpack.kotlin.test.embed.ratpack
+import ratpack.server.RatpackServer
 
 class RatpackKotlinApplicationUnderTestTest: StringSpec() {
   init {
@@ -59,7 +59,7 @@ class SampleApp {
   }
 }
 
-fun sampleApp(): KRatpackServer {
+fun sampleApp(): RatpackServer {
   return ratpack {
     serverConfig {
       port(8080)

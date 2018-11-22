@@ -9,10 +9,10 @@ import ratpack.handling.Handler
 import ratpack.handling.Handlers
 import ratpack.kotlin.handling.KChain
 import ratpack.kotlin.handling.KContext
-import ratpack.kotlin.handling.KRatpackServer
 import ratpack.kotlin.handling.KServerSpec
 import ratpack.kotlin.test.embed.internal.KEmbeddedAppSupport
 import ratpack.registry.Registry
+import ratpack.server.RatpackServer
 import ratpack.server.ServerConfig
 import ratpack.server.ServerConfigBuilder
 import ratpack.server.internal.EmbeddedRatpackServerSpec
@@ -33,7 +33,7 @@ interface KEmbeddedApp: EmbeddedApp {
      * @param server the server to embed
      * @return a newly created embedded application
      */
-    fun fromServer(server: KRatpackServer): KEmbeddedApp {
+    fun fromServer(server: RatpackServer): KEmbeddedApp {
       return fromServer(Factory { server })
     }
 
@@ -46,11 +46,14 @@ interface KEmbeddedApp: EmbeddedApp {
      * @see ratpack.server.RatpackServer.of
      */
     fun of(definition: Action<in KServerSpec>): KEmbeddedApp {
-      return fromServer(KRatpackServer.of { d -> definition.execute(KServerSpec(EmbeddedRatpackServerSpec(d.delegate))) })
+      return fromServer(RatpackServer.of { d -> definition.execute(KServerSpec(EmbeddedRatpackServerSpec(d))) })
     }
 
     fun of(definition: KServerSpec.(KServerSpec) -> Unit): KEmbeddedApp {
-      return fromServer(KRatpackServer.of { d -> definition(KServerSpec(EmbeddedRatpackServerSpec(d.delegate))) })
+      return fromServer(RatpackServer.of { d ->
+        val spec = KServerSpec(EmbeddedRatpackServerSpec(d))
+        definition(spec, spec)
+      })
     }
 
     /**
@@ -59,9 +62,9 @@ interface KEmbeddedApp: EmbeddedApp {
      * @param server a factory that creates the server to embed
      * @return a newly created embedded application
      */
-    fun fromServer(server: Factory<out KRatpackServer>): KEmbeddedApp {
+    fun fromServer(server: Factory<out RatpackServer>): KEmbeddedApp {
       return object : KEmbeddedAppSupport() {
-        override fun createServer(): KRatpackServer {
+        override fun createServer(): RatpackServer {
           return server.create()
         }
       }
@@ -86,11 +89,11 @@ interface KEmbeddedApp: EmbeddedApp {
      * @return a newly created embedded application
      */
     fun fromServer(serverConfig: ServerConfig, definition: Action<in KServerSpec>): KEmbeddedApp {
-      return fromServer(uncheck<KRatpackServer> { KRatpackServer.of { b -> definition.execute(b.serverConfig(serverConfig)) } })
+      return fromServer(uncheck<RatpackServer> { RatpackServer.of { b -> definition.execute(KServerSpec(b.serverConfig(serverConfig))) } })
     }
 
     fun fromServer(serverConfig: ServerConfig, definition: (KServerSpec) -> Unit): KEmbeddedApp {
-      return fromServer(uncheck<KRatpackServer> { KRatpackServer.of { b -> definition(b.serverConfig(serverConfig)) } })
+      return fromServer(uncheck<RatpackServer> { RatpackServer.of { b -> definition(KServerSpec(b.serverConfig(serverConfig))) } })
     }
 
     /**
@@ -116,12 +119,12 @@ interface KEmbeddedApp: EmbeddedApp {
      * @return a newly created embedded application
      */
     fun fromHandler(handler: Handler): KEmbeddedApp {
-      return fromServer(ServerConfig.embedded().build()) { b -> b.handler { r -> handler } }
+      return fromServer(ServerConfig.embedded().build()) { b -> b.handler { handler } }
     }
 
     fun fromHandler(handler: (Context) -> Unit): KEmbeddedApp {
       return fromServer(ServerConfig.embedded().build()) { b ->
-        b.handler { r -> Handler { handler(it) } }
+        b.handler { Handler { ctx -> handler(ctx) } }
       }
     }
 
@@ -144,7 +147,7 @@ interface KEmbeddedApp: EmbeddedApp {
 
   }
 
-  override fun getServer(): KRatpackServer
+  override fun getServer(): RatpackServer
 
   fun test(cb: TestHttpClient.(t: TestHttpClient) -> Unit) {
     try {

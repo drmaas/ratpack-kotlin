@@ -1,8 +1,9 @@
 package ratpack.kotlin.test
 
-import ratpack.kotlin.handling.KRatpackServer
-import ratpack.kotlin.handling.KServerCapturer
+import ratpack.kotlin.test.embed.KEmbeddedApp
 import ratpack.registry.Registry
+import ratpack.server.RatpackServer
+import ratpack.server.internal.ServerCapturer
 import ratpack.test.ApplicationUnderTest
 import ratpack.test.MainClassApplicationUnderTest
 import ratpack.test.http.TestHttpClient
@@ -33,7 +34,7 @@ fun kotlinApplicationUnderTest(url: String): KApplicationUnderTest {
 /**
  * Create a kotlin application under test from a RatpackServer object.
  */
-fun kotlinApplicationUnderTest(server: KRatpackServer): KCloseableApplicationUnderTest {
+fun kotlinApplicationUnderTest(server: RatpackServer): KCloseableApplicationUnderTest {
   return object: KCloseableApplicationUnderTest {
     override fun close() {
       server.stop()
@@ -45,9 +46,16 @@ fun kotlinApplicationUnderTest(server: KRatpackServer): KCloseableApplicationUnd
       return URI(server.scheme, null, server.bindHost, server.bindPort, "/", null, null)
     }
     override fun getRegistry(): Registry {
-      return server.getRegistry()
+      return server.registry.orElse(Registry.empty())
     }
   }
+}
+
+/**
+ * Create a kotlin application under test from an embedded app.
+ */
+fun kotlinApplicationUnderTest(app: KEmbeddedApp): KCloseableApplicationUnderTest {
+  return kotlinApplicationUnderTest(app.server)
 }
 
 /**
@@ -67,10 +75,10 @@ interface KCloseableApplicationUnderTest: KApplicationUnderTest, AutoCloseable
 
 class KMainClassApplicationUnderTest(val mainClass: KClass<*>): MainClassApplicationUnderTest(mainClass.java), KApplicationUnderTest {
 
-  private var server: KRatpackServer? = null
+  private var server: RatpackServer? = null
 
-  override fun createServer(): KRatpackServer {
-    server = KServerCapturer.capture {
+  override fun createServer(): RatpackServer {
+    server = ServerCapturer.capture {
       val method: Method
       try {
         method = mainClass.java.getDeclaredMethod("main", Array<String>::class.java)
@@ -97,6 +105,6 @@ class KMainClassApplicationUnderTest(val mainClass: KClass<*>): MainClassApplica
   }
 
   override fun getRegistry(): Registry {
-    return server?.getRegistry() ?: Registry.empty()
+    return server?.registry?.orElse(Registry.empty()) ?: Registry.empty()
   }
 }
