@@ -1,0 +1,24 @@
+= ratpack-kotlin-coutines
+
+Simplify callback hell with coroutines.
+
+This example shows how to execute two promises in parallel.
+While they are executing, no compute threads are blocked.
+When all have completed, the response is rendered.
+```
+ratpack {
+  handlers {
+    get("test") {
+      async {
+        // "true" executes the promise in a new compute thread in order
+        // to achieve parallelization
+        val d1 = Promise.value("p1").defer(true)
+        val d2 = Promise.value("p1").defer(true)
+        val r1 = d1.await()
+        val r2 = d2.await()
+        render("$r1:$r2")
+      }
+    }
+  }
+}
+```
