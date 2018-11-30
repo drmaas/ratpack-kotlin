@@ -10,7 +10,6 @@ import ratpack.test.embed.EmbeddedApp
 /**
  * See https://github.com/gregopet/kotlin-ratpack-coroutines/blob/master/src/test/kotlin/co/petrin/kotlin/BlockingBehaviorSpec.kt
  */
-@kotlinx.coroutines.ExperimentalCoroutinesApi
 class MDCPreservingSpec : Spek({
   lateinit var embeddedApp: EmbeddedApp
 

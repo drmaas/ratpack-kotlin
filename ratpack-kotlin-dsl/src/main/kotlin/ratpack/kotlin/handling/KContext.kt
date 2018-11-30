@@ -1,5 +1,6 @@
 package ratpack.kotlin.handling
 
+import kotlinx.coroutines.CoroutineScope
 import ratpack.form.Form
 import ratpack.handling.Context
 import ratpack.http.TypedData
@@ -33,6 +34,5 @@ class KContext(val delegate: Context) : Context by delegate {
   fun halt(body: String = "", status: Int = 500) = send(body, status)
   fun halt(status: Int = 500) = halt("", status)
 
-  @kotlinx.coroutines.ExperimentalCoroutinesApi
-  fun async(cb: suspend () -> Any?) = context.async(cb)
+  fun async(cb: suspend CoroutineScope.() -> Any?) = context.async(cb)
 }

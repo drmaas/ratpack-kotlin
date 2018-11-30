@@ -11,6 +11,14 @@ dependencies {
   testRuntime "org.junit.jupiter:junit-jupiter-engine:5.2.0"
 }
 
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompile).all {
+  kotlinOptions.freeCompilerArgs += ["-Xuse-experimental=kotlin.Experimental",
+                                     "-Xuse-experimental=kotlin.experimental.ExperimentalTypeInference",
+                                     "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                                     "-Xuse-experimental=kotlinx.coroutines.ObsoleteCoroutinesApi",
+                                     "-Xuse-experimental=kotlinx.coroutines.InternalCoroutinesApi"]
+}
+
 test {
   useJUnitPlatform {
     includeEngines 'spek'

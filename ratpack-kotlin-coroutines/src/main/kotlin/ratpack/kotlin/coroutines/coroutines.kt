@@ -13,13 +13,13 @@ import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.newCoroutineContext
 import kotlinx.coroutines.suspendCancellableCoroutine
 import ratpack.exec.Blocking
 import ratpack.exec.Downstream
 import ratpack.exec.Promise
 import ratpack.handling.Context
 import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
@@ -32,11 +32,10 @@ import kotlin.coroutines.resumeWithException
  *
  * @param block The block to execute
  */
-@kotlinx.coroutines.ExperimentalCoroutinesApi
-fun Context.async(block: suspend () -> Any?) {
+fun Context.async(block: suspend CoroutineScope.() -> Any?) {
   GlobalScope.launch(Unconfined, CoroutineStart.UNDISPATCHED) {
     try {
-      block()
+      block(this)
     } catch (t: Throwable) {
       this@async.error(t)
     }
@@ -61,7 +60,6 @@ suspend fun <T> Promise<T>.await(fork: Boolean = false): T = suspendCancellableC
  * Convert this [Promise] into a [Deferred] by launching an async coroutine, inside of which
  * the promised value will be resolved.
  */
-@kotlinx.coroutines.ExperimentalCoroutinesApi
 suspend fun <T> Promise<T>.defer(fork: Boolean = false): Deferred<T> {
   return GlobalScope.async(Unconfined, CoroutineStart.UNDISPATCHED) {
     this@defer.await(fork)
@@ -71,7 +69,6 @@ suspend fun <T> Promise<T>.defer(fork: Boolean = false): Deferred<T> {
 /**
  * Consume the promises in parallel and execute the zipper function on the results.
  */
-@kotlinx.coroutines.ExperimentalCoroutinesApi
 suspend fun <T1, T2, R> zip(p1: Promise<T1>, p2: Promise<T2>, zipper: (T1, T2) -> R): R {
   val d1 = p1.defer(true)
   val d2 = p2.defer(true)
@@ -81,7 +78,6 @@ suspend fun <T1, T2, R> zip(p1: Promise<T1>, p2: Promise<T2>, zipper: (T1, T2) -
 /**
  * Consume the promises in parallel and execute the zipper function on the results.
  */
-@kotlinx.coroutines.ExperimentalCoroutinesApi
 suspend fun <T1, T2, T3, R> zip(p1: Promise<T1>, p2: Promise<T2>, p3: Promise<T3>,
                                 zipper: (T1, T2, T3) -> R): R {
   val d1 = p1.defer(true)
@@ -93,7 +89,6 @@ suspend fun <T1, T2, T3, R> zip(p1: Promise<T1>, p2: Promise<T2>, p3: Promise<T3
 /**
  * Consume the promises in parallel and execute the zipper function on the results.
  */
-@kotlinx.coroutines.ExperimentalCoroutinesApi
 suspend fun <T1, T2, T3, T4, R> zip(p1: Promise<T1>, p2: Promise<T2>, p3: Promise<T3>,
                                     p4: Promise<T4>, zipper: (T1, T2, T3, T4) -> R): R {
   val d1 = p1.defer(true)
@@ -106,7 +101,6 @@ suspend fun <T1, T2, T3, T4, R> zip(p1: Promise<T1>, p2: Promise<T2>, p3: Promis
 /**
  * Consume the promises in parallel and execute the zipper function on the results.
  */
-@kotlinx.coroutines.ExperimentalCoroutinesApi
 suspend fun <T1, T2, T3, T4, T5, R> zip(p1: Promise<T1>, p2: Promise<T2>, p3: Promise<T3>,
                                         p4: Promise<T4>, p5: Promise<T5>, zipper: (T1, T2, T3, T4, T5) -> R): R {
   val d1 = p1.defer(true)
@@ -120,7 +114,6 @@ suspend fun <T1, T2, T3, T4, T5, R> zip(p1: Promise<T1>, p2: Promise<T2>, p3: Pr
 /**
  * Consume the promises in parallel and execute the zipper function on the results.
  */
-@kotlinx.coroutines.ExperimentalCoroutinesApi
 suspend fun <T1, T2, T3, T4, T5, T6, R> zip(p1: Promise<T1>, p2: Promise<T2>, p3: Promise<T3>,
                                             p4: Promise<T4>, p5: Promise<T5>, p6: Promise<T6>,
                                             zipper: (T1, T2, T3, T4, T5, T6) -> R): R {
@@ -136,7 +129,6 @@ suspend fun <T1, T2, T3, T4, T5, T6, R> zip(p1: Promise<T1>, p2: Promise<T2>, p3
 /**
  * Consume the promises in parallel and execute the zipper function on the results.
  */
-@kotlinx.coroutines.ExperimentalCoroutinesApi
 suspend fun <T1, T2, T3, T4, T5, T6, T7, R> zip(p1: Promise<T1>, p2: Promise<T2>, p3: Promise<T3>,
                                                 p4: Promise<T4>, p5: Promise<T5>, p6: Promise<T6>,
                                                 p7: Promise<T7>, zipper: (T1, T2, T3, T4, T5, T6, T7) -> R): R {
@@ -153,7 +145,6 @@ suspend fun <T1, T2, T3, T4, T5, T6, T7, R> zip(p1: Promise<T1>, p2: Promise<T2>
 /**
  * Consume the promises in parallel and execute the zipper function on the results.
  */
-@kotlinx.coroutines.ExperimentalCoroutinesApi
 suspend fun <T1, T2, T3, T4, T5, T6, T7, T8, R> zip(p1: Promise<T1>, p2: Promise<T2>, p3: Promise<T3>,
                                                     p4: Promise<T4>, p5: Promise<T5>, p6: Promise<T6>,
                                                     p7: Promise<T7>, p8: Promise<T8>, zipper: (T1, T2, T3, T4, T5, T6, T7, T8) -> R): R {
@@ -171,7 +162,6 @@ suspend fun <T1, T2, T3, T4, T5, T6, T7, T8, R> zip(p1: Promise<T1>, p2: Promise
 /**
  * Consume the promises in parallel and execute the zipper function on the results.
  */
-@kotlinx.coroutines.ExperimentalCoroutinesApi
 suspend fun <T1, T2, T3, T4, T5, T6, T7, T8, T9, R> zip(p1: Promise<T1>, p2: Promise<T2>, p3: Promise<T3>,
                                                         p4: Promise<T4>, p5: Promise<T5>, p6: Promise<T6>,
                                                         p7: Promise<T7>, p8: Promise<T8>, p9: Promise<T9>,
@@ -191,18 +181,30 @@ suspend fun <T1, T2, T3, T4, T5, T6, T7, T8, T9, R> zip(p1: Promise<T1>, p2: Pro
 /**
  * Creates a [promise][Promise] that will run a given [block] in a coroutine.
  */
-@kotlinx.coroutines.ExperimentalCoroutinesApi
-@kotlinx.coroutines.InternalCoroutinesApi
 fun <T : Any> CoroutineScope.promise(
-  context: CoroutineContext = Unconfined,
+  context: CoroutineContext = EmptyCoroutineContext,
   block: suspend CoroutineScope.() -> T
 ): Promise<T> = Promise.async { downstream ->
-  val newContext = newCoroutineContext(context)
-  val coroutine = PromiseCoroutine(newContext, downstream)
+  launch(context, CoroutineStart.UNDISPATCHED) {
+    try {
+      downstream.success(block(this))
+    } catch (e: Exception) {
+      downstream.error(e)
+    }
+  }
+}
+
+/**
+ * Creates a [promise][Promise] that will run a given [block] in a coroutine.
+ */
+fun <T : Any> promise(
+  context: CoroutineContext = EmptyCoroutineContext,
+  block: suspend CoroutineScope.() -> T
+): Promise<T> = Promise.async { downstream ->
+  val coroutine = PromiseCoroutine(context, downstream)
   coroutine.start(CoroutineStart.UNDISPATCHED, coroutine, block)
 }
 
-@kotlinx.coroutines.InternalCoroutinesApi
 private class PromiseCoroutine<T>(
   parentContext: CoroutineContext,
   private val downstream: Downstream<T>
@@ -211,13 +213,7 @@ private class PromiseCoroutine<T>(
   override fun onCompleted(value: T) {
     downstream.success(value)
   }
-
   override fun onCompletedExceptionally(exception: Throwable) {
     downstream.error(exception)
   }
 }
-
-
-
-
-
