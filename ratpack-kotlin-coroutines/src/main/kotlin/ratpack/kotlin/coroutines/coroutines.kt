@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import ratpack.exec.Blocking
 import ratpack.exec.Downstream
+import ratpack.exec.ExecSpec
 import ratpack.exec.Promise
 import ratpack.handling.Context
 import kotlin.coroutines.CoroutineContext
@@ -52,26 +53,26 @@ suspend fun <T> await(block: () -> T): T = Blocking.get(block).await()
  * Resolves the promise and returns its value as soon as the blocking computation completes. The request thread is released
  * during the blocking operation.
  */
-suspend fun <T> Promise<T>.await(fork: Boolean = false): T = suspendCancellableCoroutine { cont: CancellableContinuation<T> ->
-  if (fork) { this.fork() } else { this }.onError { cont.resumeWithException(it) }.then { cont.resume(it) }
+suspend fun <T> Promise<T>.await(fork: Boolean = false, onStart: (ExecSpec) -> Unit = {}): T = suspendCancellableCoroutine { cont: CancellableContinuation<T> ->
+  if (fork) { this.fork(onStart) } else { this }.onError { cont.resumeWithException(it) }.then { cont.resume(it) }
 }
 
 /**
  * Convert this [Promise] into a [Deferred] by launching an async coroutine, inside of which
  * the promised value will be resolved.
  */
-suspend fun <T> Promise<T>.defer(fork: Boolean = false): Deferred<T> {
+suspend fun <T> Promise<T>.defer(fork: Boolean = false, onStart: (ExecSpec) -> Unit = {}): Deferred<T> {
   return GlobalScope.async(Unconfined, CoroutineStart.UNDISPATCHED) {
-    this@defer.await(fork)
+    this@defer.await(fork, onStart)
   }
 }
 
 /**
  * Consume the promises in parallel and execute the zipper function on the results.
  */
-suspend fun <T1, T2, R> zip(p1: Promise<T1>, p2: Promise<T2>, zipper: (T1, T2) -> R): R {
-  val d1 = p1.defer(true)
-  val d2 = p2.defer(true)
+suspend fun <T1, T2, R> zip(p1: Promise<T1>, p2: Promise<T2>, onStart: (ExecSpec) -> Unit = {}, zipper: (T1, T2) -> R): R {
+  val d1 = p1.defer(true, onStart)
+  val d2 = p2.defer(true, onStart)
   return zipper(d1.await(), d2.await())
 }
 
@@ -79,10 +80,10 @@ suspend fun <T1, T2, R> zip(p1: Promise<T1>, p2: Promise<T2>, zipper: (T1, T2) -
  * Consume the promises in parallel and execute the zipper function on the results.
  */
 suspend fun <T1, T2, T3, R> zip(p1: Promise<T1>, p2: Promise<T2>, p3: Promise<T3>,
-                                zipper: (T1, T2, T3) -> R): R {
-  val d1 = p1.defer(true)
-  val d2 = p2.defer(true)
-  val d3 = p3.defer(true)
+                                onStart: (ExecSpec) -> Unit = {}, zipper: (T1, T2, T3) -> R): R {
+  val d1 = p1.defer(true, onStart)
+  val d2 = p2.defer(true, onStart)
+  val d3 = p3.defer(true, onStart)
   return zipper(d1.await(), d2.await(), d3.await())
 }
 
@@ -90,11 +91,11 @@ suspend fun <T1, T2, T3, R> zip(p1: Promise<T1>, p2: Promise<T2>, p3: Promise<T3
  * Consume the promises in parallel and execute the zipper function on the results.
  */
 suspend fun <T1, T2, T3, T4, R> zip(p1: Promise<T1>, p2: Promise<T2>, p3: Promise<T3>,
-                                    p4: Promise<T4>, zipper: (T1, T2, T3, T4) -> R): R {
-  val d1 = p1.defer(true)
-  val d2 = p2.defer(true)
-  val d3 = p3.defer(true)
-  val d4 = p4.defer(true)
+                                    p4: Promise<T4>, onStart: (ExecSpec) -> Unit = {}, zipper: (T1, T2, T3, T4) -> R): R {
+  val d1 = p1.defer(true, onStart)
+  val d2 = p2.defer(true, onStart)
+  val d3 = p3.defer(true, onStart)
+  val d4 = p4.defer(true, onStart)
   return zipper(d1.await(), d2.await(), d3.await(), d4.await())
 }
 
@@ -102,12 +103,13 @@ suspend fun <T1, T2, T3, T4, R> zip(p1: Promise<T1>, p2: Promise<T2>, p3: Promis
  * Consume the promises in parallel and execute the zipper function on the results.
  */
 suspend fun <T1, T2, T3, T4, T5, R> zip(p1: Promise<T1>, p2: Promise<T2>, p3: Promise<T3>,
-                                        p4: Promise<T4>, p5: Promise<T5>, zipper: (T1, T2, T3, T4, T5) -> R): R {
-  val d1 = p1.defer(true)
-  val d2 = p2.defer(true)
-  val d3 = p3.defer(true)
-  val d4 = p4.defer(true)
-  val d5 = p5.defer(true)
+                                        p4: Promise<T4>, p5: Promise<T5>, onStart: (ExecSpec) -> Unit = {},
+                                        zipper: (T1, T2, T3, T4, T5) -> R): R {
+  val d1 = p1.defer(true, onStart)
+  val d2 = p2.defer(true, onStart)
+  val d3 = p3.defer(true, onStart)
+  val d4 = p4.defer(true, onStart)
+  val d5 = p5.defer(true, onStart)
   return zipper(d1.await(), d2.await(), d3.await(), d4.await(), d5.await())
 }
 
@@ -116,13 +118,13 @@ suspend fun <T1, T2, T3, T4, T5, R> zip(p1: Promise<T1>, p2: Promise<T2>, p3: Pr
  */
 suspend fun <T1, T2, T3, T4, T5, T6, R> zip(p1: Promise<T1>, p2: Promise<T2>, p3: Promise<T3>,
                                             p4: Promise<T4>, p5: Promise<T5>, p6: Promise<T6>,
-                                            zipper: (T1, T2, T3, T4, T5, T6) -> R): R {
-  val d1 = p1.defer(true)
-  val d2 = p2.defer(true)
-  val d3 = p3.defer(true)
-  val d4 = p4.defer(true)
-  val d5 = p5.defer(true)
-  val d6 = p6.defer(true)
+                                            onStart: (ExecSpec) -> Unit = {}, zipper: (T1, T2, T3, T4, T5, T6) -> R): R {
+  val d1 = p1.defer(true, onStart)
+  val d2 = p2.defer(true, onStart)
+  val d3 = p3.defer(true, onStart)
+  val d4 = p4.defer(true, onStart)
+  val d5 = p5.defer(true, onStart)
+  val d6 = p6.defer(true, onStart)
   return zipper(d1.await(), d2.await(), d3.await(), d4.await(), d5.await(), d6.await())
 }
 
@@ -131,14 +133,15 @@ suspend fun <T1, T2, T3, T4, T5, T6, R> zip(p1: Promise<T1>, p2: Promise<T2>, p3
  */
 suspend fun <T1, T2, T3, T4, T5, T6, T7, R> zip(p1: Promise<T1>, p2: Promise<T2>, p3: Promise<T3>,
                                                 p4: Promise<T4>, p5: Promise<T5>, p6: Promise<T6>,
-                                                p7: Promise<T7>, zipper: (T1, T2, T3, T4, T5, T6, T7) -> R): R {
-  val d1 = p1.defer(true)
-  val d2 = p2.defer(true)
-  val d3 = p3.defer(true)
-  val d4 = p4.defer(true)
-  val d5 = p5.defer(true)
-  val d6 = p6.defer(true)
-  val d7 = p7.defer(true)
+                                                p7: Promise<T7>, onStart: (ExecSpec) -> Unit = {},
+                                                zipper: (T1, T2, T3, T4, T5, T6, T7) -> R): R {
+  val d1 = p1.defer(true, onStart)
+  val d2 = p2.defer(true, onStart)
+  val d3 = p3.defer(true, onStart)
+  val d4 = p4.defer(true, onStart)
+  val d5 = p5.defer(true, onStart)
+  val d6 = p6.defer(true, onStart)
+  val d7 = p7.defer(true, onStart)
   return zipper(d1.await(), d2.await(), d3.await(), d4.await(), d5.await(), d6.await(), d7.await())
 }
 
@@ -147,15 +150,16 @@ suspend fun <T1, T2, T3, T4, T5, T6, T7, R> zip(p1: Promise<T1>, p2: Promise<T2>
  */
 suspend fun <T1, T2, T3, T4, T5, T6, T7, T8, R> zip(p1: Promise<T1>, p2: Promise<T2>, p3: Promise<T3>,
                                                     p4: Promise<T4>, p5: Promise<T5>, p6: Promise<T6>,
-                                                    p7: Promise<T7>, p8: Promise<T8>, zipper: (T1, T2, T3, T4, T5, T6, T7, T8) -> R): R {
-  val d1 = p1.defer(true)
-  val d2 = p2.defer(true)
-  val d3 = p3.defer(true)
-  val d4 = p4.defer(true)
-  val d5 = p5.defer(true)
-  val d6 = p6.defer(true)
-  val d7 = p7.defer(true)
-  val d8 = p8.defer(true)
+                                                    p7: Promise<T7>, p8: Promise<T8>, onStart: (ExecSpec) -> Unit = {},
+                                                    zipper: (T1, T2, T3, T4, T5, T6, T7, T8) -> R): R {
+  val d1 = p1.defer(true, onStart)
+  val d2 = p2.defer(true, onStart)
+  val d3 = p3.defer(true, onStart)
+  val d4 = p4.defer(true, onStart)
+  val d5 = p5.defer(true, onStart)
+  val d6 = p6.defer(true, onStart)
+  val d7 = p7.defer(true, onStart)
+  val d8 = p8.defer(true, onStart)
   return zipper(d1.await(), d2.await(), d3.await(), d4.await(), d5.await(), d6.await(), d7.await(), d8.await())
 }
 
@@ -165,16 +169,16 @@ suspend fun <T1, T2, T3, T4, T5, T6, T7, T8, R> zip(p1: Promise<T1>, p2: Promise
 suspend fun <T1, T2, T3, T4, T5, T6, T7, T8, T9, R> zip(p1: Promise<T1>, p2: Promise<T2>, p3: Promise<T3>,
                                                         p4: Promise<T4>, p5: Promise<T5>, p6: Promise<T6>,
                                                         p7: Promise<T7>, p8: Promise<T8>, p9: Promise<T9>,
-                                                        zipper: (T1, T2, T3, T4, T5, T6, T7, T8, T9) -> R): R {
-  val d1 = p1.defer(true)
-  val d2 = p2.defer(true)
-  val d3 = p3.defer(true)
-  val d4 = p4.defer(true)
-  val d5 = p5.defer(true)
-  val d6 = p6.defer(true)
-  val d7 = p7.defer(true)
-  val d8 = p8.defer(true)
-  val d9 = p9.defer(true)
+                                                        onStart: (ExecSpec) -> Unit = {}, zipper: (T1, T2, T3, T4, T5, T6, T7, T8, T9) -> R): R {
+  val d1 = p1.defer(true, onStart)
+  val d2 = p2.defer(true, onStart)
+  val d3 = p3.defer(true, onStart)
+  val d4 = p4.defer(true, onStart)
+  val d5 = p5.defer(true, onStart)
+  val d6 = p6.defer(true, onStart)
+  val d7 = p7.defer(true, onStart)
+  val d8 = p8.defer(true, onStart)
+  val d9 = p9.defer(true, onStart)
   return zipper(d1.await(), d2.await(), d3.await(), d4.await(), d5.await(), d6.await(), d7.await(), d8.await(), d9.await())
 }
 
