@@ -79,7 +79,7 @@ class CoroutinePromiseSpec : Spek({
     test("parallel promises with coroutines - load") {
       runBlocking {
         val time = measureTimeMillis {
-          (1..100).map {
+          (1..10).map {
             GlobalScope.async {
               embeddedApp.httpClient.get("test")
             }
