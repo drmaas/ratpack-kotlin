@@ -1,4 +1,4 @@
-= ratpack-kotlin-coutines
+= ratpack-kotlin-coroutines
 
 Simplify callback hell with coroutines.
 
