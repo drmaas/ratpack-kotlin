@@ -1,6 +1,5 @@
 dependencies {
-  compile commonDependencies.ratpack
-  compile commonDependencies.kotlinReflect
+  compile project(":ratpack-kotlin-dsl")
   compile commonDependencies.kotlinCoroutines
 
   testCompile project(':ratpack-kotlin-test')

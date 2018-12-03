@@ -3,7 +3,6 @@ package ratpack.kotlin.handling
 import io.kotlintest.matchers.shouldEqual
 import io.kotlintest.specs.BehaviorSpec
 import ratpack.exec.Promise
-import ratpack.kotlin.coroutines.await
 import ratpack.kotlin.test.testHttpClient
 import java.lang.Thread.sleep
 
@@ -24,22 +23,19 @@ class KContextTest : BehaviorSpec() {
           path("async") {
             byMethod {
               get {
-                async {
-                  val text = await { sleep(500) ; "hello" }
-                  render(text)
-                }
+                val text = fun(): String { sleep(500); return "hello" }()
+                render(text)
               }
             }
           }
           path("promise") {
             byMethod {
               get {
-                async {
-                  val text = Promise.async<String> { d ->
-                      sleep(500)
-                      d.success("hello")
-                  }.await()
-                  render(text)
+                Promise.async<String> { d ->
+                  sleep(500)
+                  d.success("hello")
+                }.then {
+                  render(it)
                 }
               }
             }

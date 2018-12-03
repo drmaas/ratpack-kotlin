@@ -19,6 +19,7 @@ import ratpack.exec.Downstream
 import ratpack.exec.ExecSpec
 import ratpack.exec.Promise
 import ratpack.handling.Context
+import ratpack.kotlin.handling.KContext
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.coroutines.resume
@@ -42,6 +43,8 @@ fun Context.async(block: suspend CoroutineScope.() -> Any?) {
     }
   }
 }
+
+fun KContext.async(cb: suspend CoroutineScope.() -> Any?) = this.context.async(cb)
 
 /**
  * Returns the result of the [block] as soon as the blocking computation completes. The request thread is released
