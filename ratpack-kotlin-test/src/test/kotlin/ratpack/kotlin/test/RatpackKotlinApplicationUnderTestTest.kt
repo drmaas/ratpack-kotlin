@@ -47,7 +47,7 @@ class SampleApp {
     fun main(args: Array<String>) {
       ratpack {
         serverConfig {
-          port(8080)
+          port(8089)
         }
         handlers {
           get {
@@ -62,7 +62,7 @@ class SampleApp {
 fun sampleApp(): RatpackServer {
   return ratpack {
     serverConfig {
-      port(8080)
+      port(8089)
     }
     handlers {
       get {

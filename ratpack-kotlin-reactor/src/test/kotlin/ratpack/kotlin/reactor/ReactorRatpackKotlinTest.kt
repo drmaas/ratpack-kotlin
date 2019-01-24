@@ -8,14 +8,14 @@ import ratpack.kotlin.test.testHttpClient
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
-class RxRatpackKotlinTest : BehaviorSpec() {
+class ReactorRatpackKotlinTest : BehaviorSpec() {
 
   init {
     // test all with a closure
     given("test promise to mono") {
       val app = ratpack {
         serverConfig {
-          port(8080)
+          port(8089)
         }
         bindings {
           initialize()
@@ -41,7 +41,7 @@ class RxRatpackKotlinTest : BehaviorSpec() {
     given("test mono to promise") {
       val app = ratpack {
         serverConfig {
-          port(8080)
+          port(8089)
         }
         bindings {
           initialize()
