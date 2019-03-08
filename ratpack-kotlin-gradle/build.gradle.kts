@@ -14,10 +14,10 @@ apply {
 
 dependencies {
   // other dependencies that your plugin requires
-  compile("io.ratpack:ratpack-gradle:${(ext["commonVersions"] as Map<String, String>)["ratpack"]}")
-  compile("com.netflix.nebula:nebula-kotlin-plugin:${(ext["commonVersions"] as Map<String, String>)["kotlin"]}")
+  compile("io.ratpack:ratpack-gradle:${(project.ext["commonVersions"] as Map<String, String>)["ratpack"]}")
+  compile("com.netflix.nebula:nebula-kotlin-plugin:${(project.ext["commonVersions"] as Map<String, String>)["kotlin"]}")
 
-  testCompile("io.kotlintest:kotlintest:${(ext["commonVersions"] as Map<String, String>)["kotlinTest"]}")
+  testCompile("io.kotlintest:kotlintest:${(project.ext["commonVersions"] as Map<String, String>)["kotlinTest"]}")
 }
 
 gradlePlugin {

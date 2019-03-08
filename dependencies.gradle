@@ -2,8 +2,8 @@ ext {
   commonVersions = [
     ratpack       : '1.6.0',
     logback       : '1.2.3',
-    kotlin        : '1.3.20',
-    coroutines    : '1.1.0',
+    kotlin        : '1.3.21',
+    coroutines    : '1.1.1',
     kotlinTest    : '2.0.7',
   ]
 
@@ -12,6 +12,8 @@ ext {
     ratpackRx       : "io.ratpack:ratpack-rx:${commonVersions.ratpack}",
     ratpackRx2      : "io.ratpack:ratpack-rx2:${commonVersions.ratpack}",
     ratpackReactor  : "io.ratpack:ratpack-reactor:${commonVersions.ratpack}",
+    ratpackGradle   : "io.ratpack:ratpack-gradle:${commonVersions.ratpack}",
+    nebulaKotlin    : "com.netflix.nebula:nebula-kotlin-plugin:${commonVersions.kotlin}",
     kotlinReflect   : "org.jetbrains.kotlin:kotlin-reflect:${commonVersions.kotlin}",
     kotlinCoroutines: "org.jetbrains.kotlinx:kotlinx-coroutines-core:${commonVersions.coroutines}",
     ratpackTest     : "io.ratpack:ratpack-test:${commonVersions.ratpack}",
