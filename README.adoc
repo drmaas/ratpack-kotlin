@@ -4,6 +4,8 @@ image:https://travis-ci.org/drmaas/ratpack-kotlin.svg?branch=master["Build Statu
 
 image::https://forthebadge.com/images/badges/uses-badges.svg["forthebadge", https://forthebadge.com]
 
+== Overview
+
 Build fluent kotlin ratpack applications. Features:
 
 * Server, Bindings, Chain, and Handler DSL
@@ -17,6 +19,8 @@ Build fluent kotlin ratpack applications. Features:
 * Coroutine functions
 
 * Kotlin test harnessing support: `KotlinEmbeddedApp`, `kotlinApplicationUnderTest(...) and friends`
+
+== Usage
 
 * Gradle plugin (kotlin syntax)
 ```kotlin
@@ -59,4 +63,10 @@ Maven
   <artifactId>ratpack-kotlin-<module></artifactId>
   <version>x.x.x</version>
 </dependency>
+```
+
+== Building and Releasing
+
+```
+./gradlew -Prelease.scope=patch clean build install final publishPlugins uploadArchives
 ```
