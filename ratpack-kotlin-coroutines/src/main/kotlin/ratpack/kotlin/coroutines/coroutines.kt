@@ -64,7 +64,7 @@ suspend fun <T> Promise<T>.await(fork: Boolean = false, onStart: (ExecSpec) -> U
  * Convert this [Promise] into a [Deferred] by launching an async coroutine, inside of which
  * the promised value will be resolved.
  */
-suspend fun <T> Promise<T>.defer(fork: Boolean = false, onStart: (ExecSpec) -> Unit = {}): Deferred<T> {
+fun <T> Promise<T>.defer(fork: Boolean = false, onStart: (ExecSpec) -> Unit = {}): Deferred<T> {
   return GlobalScope.async(Unconfined, CoroutineStart.UNDISPATCHED) {
     this@defer.await(fork, onStart)
   }
