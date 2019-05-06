@@ -71,6 +71,19 @@ fun <T> Promise<T>.defer(fork: Boolean = false, onStart: (ExecSpec) -> Unit = {}
 }
 
 /**
+ * Run a block of code asynchronously in a new coroutine, but do not start it until it is referenced.
+ */
+fun <T> lazyAsync(mode: LazyThreadSafetyMode = LazyThreadSafetyMode.NONE, block: suspend CoroutineScope.() -> T): Lazy<Deferred<T>> = lazy(mode) { async(block = block) }
+
+/**
+ * Convert this block into a [Deferred] by launching an async coroutine, inside of which
+ * the block will be resolved.
+ */
+fun <T> async(start: CoroutineStart = CoroutineStart.UNDISPATCHED, block: suspend CoroutineScope.() -> T): Deferred<T> {
+  return GlobalScope.async(Unconfined, start, block = block)
+}
+
+/**
  * Consume the promises in parallel and execute the zipper function on the results.
  */
 suspend fun <T1, T2, R> zip(p1: Promise<T1>, p2: Promise<T2>, onStart: (ExecSpec) -> Unit = {}, zipper: (T1, T2) -> R): R {
@@ -220,7 +233,7 @@ private class PromiseCoroutine<T>(
   override fun onCompleted(value: T) {
     downstream.success(value)
   }
-  override fun onCompletedExceptionally(exception: Throwable) {
-    downstream.error(exception)
+  override fun onCancelled(cause: Throwable, handled: Boolean) {
+    downstream.error(cause)
   }
 }
