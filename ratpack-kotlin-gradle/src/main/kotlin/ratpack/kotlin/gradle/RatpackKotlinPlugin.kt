@@ -32,7 +32,7 @@ class RatpackKotlinPlugin : Plugin<Project> {
 
       dependencies.add("compile", ratpackKotlinExtension.getDsl())
       dependencies.add("runtimeOnly", ratpackKotlinExtension.getCompiler())
-        dependencies.add("runtimeOnly", ratpackKotlinExtension.getScript())
+      dependencies.add("runtimeOnly", ratpackKotlinExtension.getScript())
       dependencies.add("testCompile", ratpackKotlinExtension.getTest())
     }
 
