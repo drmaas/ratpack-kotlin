@@ -16,6 +16,8 @@ class RatpackKotlinExtension(project: Project, val pluginVersion: String, val ko
 
   fun getCompiler() = dependencies.create("org.jetbrains.kotlin:kotlin-compiler-embeddable:${kotlinVersion}")
 
+  fun getScriptingCompiler() = dependencies.create("org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:${kotlinVersion}")
+
   fun getDsl() = dependency("dsl")
 
   fun getTest() = dependency("test")

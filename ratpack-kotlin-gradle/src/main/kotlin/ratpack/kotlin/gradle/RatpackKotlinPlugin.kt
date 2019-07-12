@@ -30,8 +30,9 @@ class RatpackKotlinPlugin : Plugin<Project> {
 
       val ratpackKotlinExtension = RatpackKotlinExtension(project, pluginVersion, kotlinVersion) // this is just used to add dependencies
 
-      dependencies.add("compile", ratpackKotlinExtension.getDsl())
+      dependencies.add("api", ratpackKotlinExtension.getDsl())
       dependencies.add("runtimeOnly", ratpackKotlinExtension.getCompiler())
+      dependencies.add("runtimeOnly", ratpackKotlinExtension.getScriptingCompiler())
       dependencies.add("runtimeOnly", ratpackKotlinExtension.getScript())
       dependencies.add("testCompile", ratpackKotlinExtension.getTest())
     }
