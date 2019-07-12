@@ -69,7 +69,3 @@ subprojects {
 }
 
 apply from: 'dependencies.gradle'
-
-wrapper {
-  gradleVersion = '5.2.1'
-}
