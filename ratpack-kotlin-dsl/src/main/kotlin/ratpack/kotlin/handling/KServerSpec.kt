@@ -5,6 +5,7 @@ import ratpack.guice.BindingsSpec
 import ratpack.guice.Guice
 import ratpack.handling.Handler
 import ratpack.registry.Registry
+import ratpack.registry.RegistrySpec
 import ratpack.server.RatpackServerSpec
 import ratpack.server.ServerConfig
 import ratpack.server.ServerConfigBuilder
@@ -26,7 +27,14 @@ class KServerSpec(val delegate: RatpackServerSpec) {
     return this
   }
 
-  inline fun bindings(crossinline cb: BindingsSpec.(BindingsSpec) -> Unit): KServerSpec {
+  inline fun bindings(crossinline cb: BindingsSpec.(BindingsSpec) -> Unit) = guiceRegistry(cb)
+
+  inline fun registry(crossinline cb: RegistrySpec.(RegistrySpec) -> Unit): KServerSpec {
+    delegate.registry(Registry.of { it.cb(it) })
+    return this
+  }
+
+  inline fun guiceRegistry(crossinline cb: BindingsSpec.(BindingsSpec) -> Unit): KServerSpec {
     delegate.registry(Guice.registry { it.cb(it) })
     return this
   }
