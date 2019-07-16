@@ -3,6 +3,9 @@ package ratpack.kotlin.test
 import io.kotlintest.matchers.shouldEqual
 import io.kotlintest.matchers.shouldNotBe
 import io.kotlintest.specs.StringSpec
+import org.junit.Test
+import ratpack.guice.BindingsImposition
+import ratpack.impose.ImpositionsSpec
 import ratpack.kotlin.test.embed.ratpack
 import ratpack.server.RatpackServer
 
@@ -38,6 +41,20 @@ class RatpackKotlinApplicationUnderTestTest: StringSpec() {
       aut.close()
     }
 
+    "test an app via main class with impositions" {
+      val aut = object : KMainClassApplicationUnderTest(SampleApp::class) {
+        override fun addImpositions(impositions: ImpositionsSpec?) {
+          impositions?.add(BindingsImposition.of { it.bindInstance(String::class.java, "bar") })
+        }
+      }
+
+      aut.test {client ->
+        val response = client.get()
+        response.statusCode shouldEqual 200
+        response.body.text shouldEqual "bar"
+        aut.getRegistry() shouldNotBe null
+      }
+    }
   }
 }
 
@@ -49,9 +66,12 @@ class SampleApp {
         serverConfig {
           port(8089)
         }
+        bindings {
+          bindInstance(String::class.java, "foo")
+        }
         handlers {
           get {
-            render("foo")
+            render(get(String::class.java))
           }
         }
       }
