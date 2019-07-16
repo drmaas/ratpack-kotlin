@@ -73,7 +73,7 @@ interface KApplicationUnderTest: ApplicationUnderTest {
 
 interface KCloseableApplicationUnderTest: KApplicationUnderTest, AutoCloseable
 
-class KMainClassApplicationUnderTest(val mainClass: KClass<*>): MainClassApplicationUnderTest(mainClass.java), KApplicationUnderTest {
+open class KMainClassApplicationUnderTest(val mainClass: KClass<*>): MainClassApplicationUnderTest(mainClass.java), KApplicationUnderTest {
 
   private var server: RatpackServer? = null
 
