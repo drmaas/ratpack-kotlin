@@ -9,4 +9,4 @@ inline fun serverOf(crossinline cb: KServerSpec.(KServerSpec) -> Unit) = Ratpack
 
 inline fun serverStart(crossinline cb: KServerSpec.(KServerSpec) -> Unit) = RatpackServer.start { val s = KServerSpec(it); s.cb(s) }
 
-inline fun ratpack(crossinline cb: KServerSpec.(KServerSpec) -> Unit) = serverOf(cb)
+inline fun ratpack(crossinline cb: KServerSpec.(KServerSpec) -> Unit) = serverStart(cb)
