@@ -229,7 +229,6 @@ private class PromiseCoroutine<T>(
   parentContext: CoroutineContext,
   private val downstream: Downstream<T>
 ) : AbstractCoroutine<T>(parentContext, true) {
-  override val cancelsParent: Boolean get() = true
   override fun onCompleted(value: T) {
     downstream.success(value)
   }
