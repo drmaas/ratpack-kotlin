@@ -1,0 +1,51 @@
+buildscript {
+    ext {
+
+        lombokVersion = "1.18.6"
+        kloggerVersion = "1.7.7"
+        ratpackKotlinVersion = "1.9.4"
+    }
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+        maven { url 'http://packages.confluent.io/maven' }
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        lombok:"org.projectlombok:lombok:${lombokVersion}"
+    }
+}
+
+plugins {
+        id 'org.jetbrains.kotlin.jvm' version '1.3.21'
+        id 'me.drmaas.ratpack-kotlin' version '1.9.4'
+
+}
+allprojects {
+    apply plugin: "me.drmaas.ratpack-kotlin"
+}
+
+
+group 'build'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project('wiremock-config')
+    compile "org.slf4j:slf4j-simple:1.7.26"
+    compile "org.projectlombok:lombok:${lombokVersion}"
+    compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.10.+"
+    compile "io.github.microutils:kotlin-logging:${kloggerVersion}"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}

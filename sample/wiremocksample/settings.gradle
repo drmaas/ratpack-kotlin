@@ -1,0 +1,3 @@
+rootProject.name = 'wiremocksample'
+include 'wiremock-config'
+
