@@ -26,7 +26,7 @@ class RatpackKotlinPlugin : Plugin<Project> {
       application?.mainClassName = "ratpack.kotlin.runner.KotlinDslRunner"
 
       val pluginVersion = RatpackKotlinPlugin::class.java.classLoader.getResource("version.txt").readText().trim()
-      val kotlinVersion = "1.3.50" // need a better way
+      val kotlinVersion = "1.3.61" // need a better way
 
       val ratpackKotlinExtension = RatpackKotlinExtension(project, pluginVersion, kotlinVersion) // this is just used to add dependencies
 
