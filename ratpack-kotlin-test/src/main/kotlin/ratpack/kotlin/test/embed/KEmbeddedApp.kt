@@ -9,6 +9,8 @@ import ratpack.handling.Handler
 import ratpack.handling.Handlers
 import ratpack.kotlin.handling.KChain
 import ratpack.kotlin.handling.KContext
+import ratpack.kotlin.handling.KHandler
+import ratpack.kotlin.handling.KHandlers
 import ratpack.kotlin.handling.KServerSpec
 import ratpack.kotlin.test.embed.internal.KEmbeddedAppSupport
 import ratpack.registry.Registry
@@ -128,6 +130,14 @@ interface KEmbeddedApp: EmbeddedApp {
       }
     }
 
+    fun fromKHandler(handler: KHandler): KEmbeddedApp {
+      return fromServer(ServerConfig.embedded().build()) { b -> b.handler { handler } }
+    }
+
+    fun fromKHandler(handler: (KContext) -> Unit): KEmbeddedApp {
+      return fromHandler { ctx: KContext ->  handler(ctx) }
+    }
+
     /**
      * Creates an embedded application with a default launch config (no base dir, ephemeral port) and the given handler chain.
      *
@@ -145,11 +155,19 @@ interface KEmbeddedApp: EmbeddedApp {
       return fromServer(ServerConfig.embedded().build()) { b -> b.handlers {  }.handler { r -> Handlers.chain(r.get(ServerConfig::class.java), r, action) } }
     }
 
+    fun fromKHandlers(action: Action<in KChain>): KEmbeddedApp {
+      return fromServer(ServerConfig.embedded().build()) { b -> b.handler { r -> KHandlers.chain(r.get(ServerConfig::class.java), r, action) } }
+    }
+
+    fun fromKHandlers(action: (KChain) -> Unit): KEmbeddedApp {
+      return fromServer(ServerConfig.embedded().build()) { b -> b.handlers {  }.handler { r -> KHandlers.chain(r.get(ServerConfig::class.java), r, action) } }
+    }
+
   }
 
   override fun getServer(): RatpackServer
 
-  fun test(cb: TestHttpClient.(t: TestHttpClient) -> Unit) {
+  fun test(cb: TestHttpClient.(TestHttpClient) -> Unit) {
     try {
       cb(httpClient, httpClient)
     } finally {
