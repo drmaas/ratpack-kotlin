@@ -60,6 +60,10 @@ suspend fun <T> Promise<T>.await(fork: Boolean = false, onStart: (ExecSpec) -> U
   if (fork) { this.fork(onStart) } else { this }.onError { cont.resumeWithException(it) }.then { cont.resume(it) }
 }
 
+fun <T> lazyDefer(mode: LazyThreadSafetyMode = LazyThreadSafetyMode.NONE, deferred: Deferred<T>): Lazy<Deferred<T>> = lazy(mode) { deferred }
+
+fun <T> lazyDeferIf(predicate: () -> Boolean, deferred: Deferred<T>): Lazy<Deferred<T>?> = lazy(LazyThreadSafetyMode.NONE) { if (predicate()) deferred else null }
+
 /**
  * Convert this [Promise] into a [Deferred] by launching an async coroutine, inside of which
  * the promised value will be resolved.
