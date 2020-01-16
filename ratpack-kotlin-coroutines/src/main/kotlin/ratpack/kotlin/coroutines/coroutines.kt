@@ -53,6 +53,12 @@ fun KContext.async(cb: suspend CoroutineScope.() -> Any?) = this.context.async(c
 suspend fun <T> await(block: () -> T): T = Blocking.get(block).await()
 
 /**
+ * Returns the result of the [block] as soon as the blocking computation completes. The request thread is released
+ * during the blocking operation.
+ */
+fun <T> defer(block: () -> T): Deferred<T> = Blocking.get(block).defer()
+
+/**
  * Resolves the promise and returns its value as soon as the blocking computation completes. The request thread is released
  * during the blocking operation.
  */
