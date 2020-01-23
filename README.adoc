@@ -20,6 +20,10 @@ Build fluent kotlin ratpack applications. Features:
 
 * Kotlin test harnessing support: `KotlinEmbeddedApp`, `kotlinApplicationUnderTest(...) and friends`
 
+== Sample
+
+link:https://github.com/drmaas/ratpack-kotlin-demo[View A Sample Project Here]
+
 == Usage
 
 * Gradle plugin (kotlin syntax)
