@@ -8,6 +8,7 @@ import ratpack.http.client.RequestSpec
 import java.net.URI
 
 class KHttpClient(val client: HttpClient) : HttpClient by client {
+
   fun get(uri: String, action: (RequestSpec) -> Unit): Promise<ReceivedResponse> {
     return get(URI.create(uri), action)
   }

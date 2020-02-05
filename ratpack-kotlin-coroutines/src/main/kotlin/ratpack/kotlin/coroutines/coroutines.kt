@@ -53,12 +53,22 @@ fun KContext.async(cb: suspend CoroutineScope.() -> Any?) = this.context.async(c
 suspend fun <T> await(block: () -> T): T = Blocking.get(block).await()
 
 /**
+ * Returns the result of the [block] as soon as the blocking computation completes. The request thread is released
+ * during the blocking operation.
+ */
+fun <T> defer(block: () -> T): Deferred<T> = Blocking.get(block).defer()
+
+/**
  * Resolves the promise and returns its value as soon as the blocking computation completes. The request thread is released
  * during the blocking operation.
  */
 suspend fun <T> Promise<T>.await(fork: Boolean = false, onStart: (ExecSpec) -> Unit = {}): T = suspendCancellableCoroutine { cont: CancellableContinuation<T> ->
   if (fork) { this.fork(onStart) } else { this }.onError { cont.resumeWithException(it) }.then { cont.resume(it) }
 }
+
+fun <T> lazyDefer(mode: LazyThreadSafetyMode = LazyThreadSafetyMode.NONE, deferred: Deferred<T>): Lazy<Deferred<T>> = lazy(mode) { deferred }
+
+fun <T> lazyDeferIf(predicate: () -> Boolean, deferred: Deferred<T>): Lazy<Deferred<T>?> = lazy(LazyThreadSafetyMode.NONE) { if (predicate()) deferred else null }
 
 /**
  * Convert this [Promise] into a [Deferred] by launching an async coroutine, inside of which
