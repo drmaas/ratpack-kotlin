@@ -9,14 +9,17 @@ import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import ratpack.exec.Blocking
 import ratpack.exec.Downstream
 import ratpack.exec.ExecSpec
+import ratpack.exec.Execution
 import ratpack.exec.Promise
 import ratpack.handling.Context
 import ratpack.kotlin.handling.KContext
@@ -63,7 +66,12 @@ fun <T> defer(block: () -> T): Deferred<T> = Blocking.get(block).defer()
  * during the blocking operation.
  */
 suspend fun <T> Promise<T>.await(fork: Boolean = false, onStart: (ExecSpec) -> Unit = {}): T = suspendCancellableCoroutine { cont: CancellableContinuation<T> ->
-  if (fork) { this.fork(onStart) } else { this }.onError { cont.resumeWithException(it) }.then { cont.resume(it) }
+  if (fork) { this.fork(onStart) } else { this }
+    .onError {
+      cont.resumeWithException(it)
+    }.then {
+      cont.resume(it)
+    }
 }
 
 fun <T> lazyDefer(mode: LazyThreadSafetyMode = LazyThreadSafetyMode.NONE, deferred: Deferred<T>): Lazy<Deferred<T>> = lazy(mode) { deferred }
@@ -84,6 +92,8 @@ fun <T> Promise<T>.defer(fork: Boolean = false, onStart: (ExecSpec) -> Unit = {}
  * Run a block of code asynchronously in a new coroutine, but do not start it until it is referenced.
  */
 fun <T> lazyAsync(mode: LazyThreadSafetyMode = LazyThreadSafetyMode.NONE, block: suspend CoroutineScope.() -> T): Lazy<Deferred<T>> = lazy(mode) { async(block = block) }
+
+fun <T> lazyAsyncIf(predicate: () -> Boolean, block: suspend CoroutineScope.() -> T): Lazy<Deferred<T>?> = lazy(LazyThreadSafetyMode.NONE) { if (predicate()) async(block = block) else null }
 
 /**
  * Convert this block into a [Deferred] by launching an async coroutine, inside of which
@@ -242,6 +252,7 @@ private class PromiseCoroutine<T>(
   override fun onCompleted(value: T) {
     downstream.success(value)
   }
+
   override fun onCancelled(cause: Throwable, handled: Boolean) {
     downstream.error(cause)
   }

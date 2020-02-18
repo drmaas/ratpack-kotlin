@@ -62,6 +62,8 @@ inline fun <reified T> single(implementation: T): Registry = Registry.single(T::
 
 // Context
 
+inline fun <reified T> Context.get(): T = get(T::class.java)
+
 inline fun <reified T> Context.parse(): Promise<T> = parse(T::class.java)
 
 inline fun <reified T, O> Context.parse(options: O): Promise<T> = parse(T::class.java, options)
@@ -77,6 +79,10 @@ inline fun <reified T> typeLiteral() = object : TypeLiteral<T>() {}
 // Key
 
 inline fun <reified T> key() = object : Key<T>() {}
+
+// KContext
+
+inline fun <reified T> KContext.get(): T = get(T::class.java)
 
 // KChain
 

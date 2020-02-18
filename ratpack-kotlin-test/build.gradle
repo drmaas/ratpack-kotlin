@@ -3,4 +3,5 @@ dependencies {
   compile commonDependencies.ratpackTest
 
   testCompile commonDependencies.kotlinTest
+  testCompile commonDependencies.kotlinTestAssertions
 }

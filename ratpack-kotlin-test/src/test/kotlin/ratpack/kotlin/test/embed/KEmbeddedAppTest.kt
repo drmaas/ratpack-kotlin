@@ -1,6 +1,6 @@
 package ratpack.kotlin.test.embed
 
-import io.kotlintest.matchers.shouldBe
+import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 import ratpack.server.ServerConfig
 

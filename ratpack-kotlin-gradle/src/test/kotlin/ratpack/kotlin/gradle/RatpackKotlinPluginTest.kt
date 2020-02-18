@@ -1,18 +1,31 @@
 package ratpack.kotlin.gradle
 
-import io.kotlintest.matchers.shouldEqual
+import io.kotlintest.TestCase
+import io.kotlintest.TestCaseConfig
+import io.kotlintest.TestResult
+import io.kotlintest.shouldBe
 import io.kotlintest.specs.BehaviorSpec
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome.SUCCESS
-import org.junit.Ignore
-import org.junit.rules.TemporaryFolder
+import java.io.File
 
-@Ignore
 class RatpackKotlinPluginTest : BehaviorSpec() {
-  val testProjectDir = TemporaryFolder()
+
+  lateinit var testProjectDir: File
+
+  override val defaultTestCaseConfig = TestCaseConfig(enabled = false)
+
+  override fun beforeTest(testCase: TestCase) {
+    testProjectDir = File.createTempFile("ratpack-kotlin", ".tmp")
+    testProjectDir.deleteOnExit()
+  }
+
+  override fun afterTest(testCase: TestCase, result: TestResult) {
+    testProjectDir.delete()
+  }
+
   init {
     given("build script") {
-      testProjectDir.create()
       withBuildFile {
         """
 buildscript {
@@ -39,13 +52,13 @@ version = "0.0.1"
 
       `when`("build file is executed") {
         val result = GradleRunner.create()
-          .withProjectDir(testProjectDir.root)
+          .withProjectDir(testProjectDir)
           .withArguments("shadowJar")
           .build()
 
         then("it worked ok") {
           result.output.contains("Successfully resolved URL 'http://www.google.com/'")
-          result.task(":shadowJar")?.outcome shouldEqual SUCCESS
+          result.task(":shadowJar")?.outcome shouldBe SUCCESS
           testProjectDir.delete()
         }
       }
@@ -54,7 +67,7 @@ version = "0.0.1"
 
   // build the file with the supplied text
   private fun withBuildFile(definition: () -> String) {
-    val buildFile = testProjectDir.newFile("build.gradle.kts")
+    val buildFile = File(testProjectDir, "build.gradle.kts")
     buildFile.printWriter().use {
       it.println(definition.invoke())
     }

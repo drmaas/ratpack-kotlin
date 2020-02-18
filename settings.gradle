@@ -1,5 +1,4 @@
 include 'ratpack-kotlin-dsl',
-  'ratpack-kotlin-rx',
   'ratpack-kotlin-rx2',
   'ratpack-kotlin-reactor',
   'ratpack-kotlin-test',

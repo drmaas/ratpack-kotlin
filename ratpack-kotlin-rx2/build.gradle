@@ -3,5 +3,6 @@ dependencies {
 
   testCompile project(':ratpack-kotlin-test')
   testCompile commonDependencies.kotlinTest
+  testCompile commonDependencies.kotlinTestAssertions
   testCompile commonDependencies.logback
 }

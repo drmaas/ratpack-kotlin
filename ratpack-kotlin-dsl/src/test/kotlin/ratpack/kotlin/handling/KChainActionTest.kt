@@ -1,6 +1,6 @@
 package ratpack.kotlin.handling
 
-import io.kotlintest.matchers.shouldEqual
+import io.kotlintest.shouldBe
 import io.kotlintest.specs.BehaviorSpec
 import ratpack.kotlin.test.embed.ratpack
 import ratpack.kotlin.test.testHttpClient
@@ -22,8 +22,8 @@ class KChainActionTest : BehaviorSpec() {
         val client = testHttpClient(app)
         val r = client.get("v1/test")
         then("it works") {
-          r.statusCode shouldEqual 200
-          r.body.text shouldEqual "hello"
+          r.statusCode shouldBe 200
+          r.body.text shouldBe "hello"
           app.close()
         }
       }
@@ -31,8 +31,8 @@ class KChainActionTest : BehaviorSpec() {
         val client = testHttpClient(app)
         val r = client.get("test")
         then("it works") {
-          r.statusCode shouldEqual 200
-          r.body.text shouldEqual "hello"
+          r.statusCode shouldBe 200
+          r.body.text shouldBe "hello"
           app.close()
         }
       }
@@ -40,8 +40,8 @@ class KChainActionTest : BehaviorSpec() {
         val client = testHttpClient(app)
         val r = client.get("path")
         then("it works") {
-          r.statusCode shouldEqual 200
-          r.body.text shouldEqual "hello"
+          r.statusCode shouldBe 200
+          r.body.text shouldBe "hello"
           app.close()
         }
       }

@@ -2,6 +2,7 @@
 
 Simplify callback hell with coroutines.
 
+== async servers
 This example shows how to execute two promises in parallel.
 While they are executing, no compute threads are blocked.
 When all have completed, the response is rendered.
@@ -22,3 +23,5 @@ ratpack {
   }
 }
 ```
+
+== async clients

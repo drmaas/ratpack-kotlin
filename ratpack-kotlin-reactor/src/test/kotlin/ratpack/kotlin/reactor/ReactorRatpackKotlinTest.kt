@@ -1,6 +1,6 @@
 package ratpack.kotlin.reactor
 
-import io.kotlintest.matchers.shouldEqual
+import io.kotlintest.shouldBe
 import io.kotlintest.specs.BehaviorSpec
 import ratpack.exec.Promise
 import ratpack.kotlin.test.embed.ratpack
@@ -32,8 +32,8 @@ class ReactorRatpackKotlinTest : BehaviorSpec() {
         val client = testHttpClient(app)
         val r = client.get("")
         then("it works") {
-          r.statusCode shouldEqual 200
-          r.body.text shouldEqual "hello"
+          r.statusCode shouldBe 200
+          r.body.text shouldBe "hello"
         }
       }
       app.close()
@@ -58,8 +58,8 @@ class ReactorRatpackKotlinTest : BehaviorSpec() {
         val client = testHttpClient(app)
         val r = client.get("")
         then("it works") {
-          r.statusCode shouldEqual 200
-          r.body.text shouldEqual "hello"
+          r.statusCode shouldBe 200
+          r.body.text shouldBe "hello"
         }
       }
       app.close()

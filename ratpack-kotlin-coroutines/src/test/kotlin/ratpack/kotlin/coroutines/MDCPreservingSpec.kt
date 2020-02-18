@@ -1,6 +1,7 @@
 package ratpack.kotlin.coroutines
 
-import org.jetbrains.spek.api.Spek
+import io.kotlintest.Spec
+import io.kotlintest.specs.StringSpec
 import org.slf4j.MDC
 import ratpack.error.ServerErrorHandler
 import ratpack.kotlin.test.embed.ratpack
@@ -10,10 +11,11 @@ import ratpack.test.embed.EmbeddedApp
 /**
  * See https://github.com/gregopet/kotlin-ratpack-coroutines/blob/master/src/test/kotlin/co/petrin/kotlin/BlockingBehaviorSpec.kt
  */
-class MDCPreservingSpec : Spek({
+class MDCPreservingSpec : StringSpec() {
+
   lateinit var embeddedApp: EmbeddedApp
 
-  beforeEachTest {
+  override fun beforeSpec(spec: Spec) {
     embeddedApp = ratpack {
       bindings {
         bindInstance(MDCInterceptor.instance())
@@ -64,28 +66,29 @@ class MDCPreservingSpec : Spek({
     }
   }
 
-  afterEachTest {
+  override fun afterSpec(spec: Spec) {
     embeddedApp.close()
   }
 
-  test("The MDC is preserved inside await blocks") {
-    val response = embeddedApp.httpClient.getText("simplecall")
-    check(response == "value") { "Response should have been 'value' but was '$response'" }
-  }
+  init {
+    "The MDC is preserved inside await blocks" {
+      val response = embeddedApp.httpClient.getText("simplecall")
+      check(response == "value") { "Response should have been 'value' but was '$response'" }
+    }
 
-  test("The MDC is preserved inside mixed sync/async handling") {
-    val response = embeddedApp.httpClient.getText("mixedexecution")
-    check(response == "value") { "Response should have been 'value' but was '$response'" }
-  }
+    "The MDC is preserved inside mixed sync/async handling" {
+      val response = embeddedApp.httpClient.getText("mixedexecution")
+      check(response == "value") { "Response should have been 'value' but was '$response'" }
+    }
 
-  test("The MDC is preserved during exception handling") {
-    val response = embeddedApp.httpClient.getText("caughtexception")
-    check(response == "value") { "Response should have been 'value' but was '$response'" }
-  }
+    "The MDC is preserved during exception handling" {
+      val response = embeddedApp.httpClient.getText("caughtexception")
+      check(response == "value") { "Response should have been 'value' but was '$response'" }
+    }
 
-  test("The MDC is preserved for the default exception handler") {
-    val response = embeddedApp.httpClient.getText("uncaughtexception")
-    check(response == "value") { "Response should have been 'value' but was '$response'" }
+    "The MDC is preserved for the default exception handler" {
+      val response = embeddedApp.httpClient.getText("uncaughtexception")
+      check(response == "value") { "Response should have been 'value' but was '$response'" }
+    }
   }
-
-})
+}

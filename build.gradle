@@ -36,6 +36,10 @@ subprojects {
     jcenter()
   }
 
+  test {
+    useJUnitPlatform()
+  }
+
   modifyPom {
     project {
       name 'Ratpack kotlin dsl library'

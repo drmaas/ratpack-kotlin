@@ -14,10 +14,13 @@ apply {
 
 dependencies {
   // other dependencies that your plugin requires
-  compile("io.ratpack:ratpack-gradle:${(project.ext["commonVersions"] as Map<String, String>)["ratpack"]}")
-  compile("com.netflix.nebula:nebula-kotlin-plugin:${(project.ext["commonVersions"] as Map<String, String>)["kotlin"]}")
+  implementation("io.ratpack:ratpack-gradle:${(project.ext["commonVersions"] as Map<String, String>)["ratpack"]}")
+  implementation("com.netflix.nebula:nebula-kotlin-plugin:${(project.ext["commonVersions"] as Map<String, String>)["kotlin"]}")
 
-  testCompile("io.kotlintest:kotlintest:${(project.ext["commonVersions"] as Map<String, String>)["kotlinTest"]}")
+  testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
+  testImplementation("org.junit.jupiter:junit-jupiter-engine:5.6.0")
+  testImplementation("io.kotlintest:kotlintest-runner-junit5:${(project.ext["commonVersions"] as Map<String, String>)["kotlinTest"]}")
+  testImplementation("io.kotlintest:kotlintest-assertions:${(project.ext["commonVersions"] as Map<String, String>)["kotlinTest"]}")
 }
 
 gradlePlugin {

@@ -1,9 +1,8 @@
 package ratpack.kotlin.test
 
-import io.kotlintest.matchers.shouldEqual
-import io.kotlintest.matchers.shouldNotBe
+import io.kotlintest.shouldBe
+import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.StringSpec
-import org.junit.Test
 import ratpack.guice.BindingsImposition
 import ratpack.impose.ImpositionsSpec
 import ratpack.kotlin.test.embed.ratpack
@@ -15,8 +14,8 @@ class RatpackKotlinApplicationUnderTestTest: StringSpec() {
       val aut = kotlinApplicationUnderTest(SampleApp::class)
       val client = testHttpClient(aut)
       val response = client.get()
-      response.statusCode shouldEqual 200
-      response.body.text shouldEqual "foo"
+      response.statusCode shouldBe 200
+      response.body.text shouldBe "foo"
       aut.close()
     }
 
@@ -26,8 +25,8 @@ class RatpackKotlinApplicationUnderTestTest: StringSpec() {
       val aut = kotlinApplicationUnderTest("${app.scheme}://${app.bindHost}:${app.bindPort}")
       val client = testHttpClient(aut)
       val response = client.get()
-      response.statusCode shouldEqual 200
-      response.body.text shouldEqual "foo"
+      response.statusCode shouldBe 200
+      response.body.text shouldBe "foo"
       app.stop()
     }
 
@@ -35,8 +34,8 @@ class RatpackKotlinApplicationUnderTestTest: StringSpec() {
       val aut = kotlinApplicationUnderTest(sampleApp())
       val client = testHttpClient(aut)
       val response = client.get()
-      response.statusCode shouldEqual 200
-      response.body.text shouldEqual "foo"
+      response.statusCode shouldBe 200
+      response.body.text shouldBe "foo"
       aut.getRegistry() shouldNotBe null
       aut.close()
     }
@@ -50,8 +49,8 @@ class RatpackKotlinApplicationUnderTestTest: StringSpec() {
 
       aut.test {client ->
         val response = client.get()
-        response.statusCode shouldEqual 200
-        response.body.text shouldEqual "bar"
+        response.statusCode shouldBe 200
+        response.body.text shouldBe "bar"
         aut.getRegistry() shouldNotBe null
       }
     }

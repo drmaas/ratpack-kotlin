@@ -1,6 +1,6 @@
 package ratpack.kotlin.handling
 
-import io.kotlintest.matchers.shouldEqual
+import io.kotlintest.shouldBe
 import io.kotlintest.specs.BehaviorSpec
 import ratpack.func.Action
 import ratpack.kotlin.test.embed.ratpack
@@ -18,7 +18,7 @@ class KServerSpecTest : BehaviorSpec() {
       }
       `when`("the application runs") {
         then("serverConfig(action: Action<in ServerConfigBuilder>) works") {
-          app.address.toString() shouldEqual "http://localhost:1234/"
+          app.address.toString() shouldBe "http://localhost:1234/"
           app.close()
         }
       }

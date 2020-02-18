@@ -2,7 +2,7 @@ package ratpack.kotlin.handling
 
 import com.google.inject.AbstractModule
 import com.google.inject.Provider
-import io.kotlintest.matchers.shouldEqual
+import io.kotlintest.shouldBe
 import io.kotlintest.specs.BehaviorSpec
 import ratpack.func.Action
 import ratpack.guice.BindingsSpec
@@ -20,7 +20,7 @@ class ExtensionsTest : BehaviorSpec() {
           it.module<MyModule>()
         }
         then("it works") {
-          result.get<String>() shouldEqual "test"
+          result.get<String>() shouldBe "test"
         }
       }
       `when`("module 2") {
@@ -30,8 +30,8 @@ class ExtensionsTest : BehaviorSpec() {
           })
         }
         then("it works") {
-          result.get<String>() shouldEqual "test"
-          result.get<MyConfig>().x shouldEqual "x"
+          result.get<String>() shouldBe "test"
+          result.get<MyConfig>().x shouldBe "x"
         }
       }
       `when`("moduleConfig 1") {
@@ -41,8 +41,8 @@ class ExtensionsTest : BehaviorSpec() {
           })
         }
         then("it works") {
-          result.get<String>() shouldEqual "test"
-          result.get<MyConfig>().x shouldEqual "y"
+          result.get<String>() shouldBe "test"
+          result.get<MyConfig>().x shouldBe "y"
         }
       }
       `when`("moduleConfig 2") {
@@ -50,8 +50,8 @@ class ExtensionsTest : BehaviorSpec() {
           it.moduleConfig<MyConfigurableModule, MyConfig>(MyConfig("x"))
         }
         then("it works") {
-          result.get<String>() shouldEqual "test"
-          result.get<MyConfig>().x shouldEqual "x"
+          result.get<String>() shouldBe "test"
+          result.get<MyConfig>().x shouldBe "x"
         }
       }
       `when`("multiBinder") {
@@ -62,7 +62,7 @@ class ExtensionsTest : BehaviorSpec() {
           })
         }
         then("it works") {
-          result.get<Set<String>>() shouldEqual setOf("x","y")
+          result.get<Set<String>>() shouldBe setOf("x","y")
         }
       }
       `when`("bind") {
@@ -70,7 +70,7 @@ class ExtensionsTest : BehaviorSpec() {
           it.bind<String>()
         }
         then("it works") {
-          result.get<String>() shouldEqual ""
+          result.get<String>() shouldBe ""
         }
       }
       `when`("bindType") {
@@ -78,7 +78,7 @@ class ExtensionsTest : BehaviorSpec() {
           it.bindType<Test, Test2>()
         }
         then("it works") {
-          result.get<Test>().x shouldEqual ""
+          result.get<Test>().x shouldBe ""
         }
       }
       `when`("multiBind") {
@@ -86,7 +86,7 @@ class ExtensionsTest : BehaviorSpec() {
           it.multiBind<Test>()
         }
         then("it works") {
-          result.get<Test>().x shouldEqual ""
+          result.get<Test>().x shouldBe ""
         }
       }
       `when`("bindInstance") {
@@ -94,7 +94,7 @@ class ExtensionsTest : BehaviorSpec() {
           it.bindInstance<Test>(Test("1"))
         }
         then("it works") {
-          result.get<Test>().x shouldEqual "1"
+          result.get<Test>().x shouldBe "1"
         }
       }
       `when`("multiBindInstance") {
@@ -102,7 +102,7 @@ class ExtensionsTest : BehaviorSpec() {
           it.multiBindInstance<Test3>(Test3("1")).multiBindInstance<Test3>(Test3("2"))
         }
         then("it works") {
-          result.get<Set<Test>>() shouldEqual setOf(Test3("1"), Test3("2"))
+          result.get<Set<Test>>() shouldBe setOf(Test3("1"), Test3("2"))
         }
       }
       `when`("provider") {
@@ -110,7 +110,7 @@ class ExtensionsTest : BehaviorSpec() {
           it.provider(Test3Provider())
         }
         then("it works") {
-          result.get<Test3>() shouldEqual Test3("1")
+          result.get<Test3>() shouldBe Test3("1")
         }
       }
       `when`("multiBindProvider") {
@@ -118,7 +118,7 @@ class ExtensionsTest : BehaviorSpec() {
           it.multiBindProvider(Test3Provider2("1")).multiBindProvider(Test3Provider2("2"))
         }
         then("it works") {
-          result.get<Set<Test>>() shouldEqual setOf(Test3("1"), Test3("2"))
+          result.get<Set<Test>>() shouldBe setOf(Test3("1"), Test3("2"))
         }
       }
     }

@@ -1,6 +1,6 @@
 package ratpack.kotlin.rx2
 
-import io.kotlintest.matchers.shouldEqual
+import io.kotlintest.shouldBe
 import io.kotlintest.specs.BehaviorSpec
 import io.reactivex.Observable
 import io.reactivex.functions.Consumer
@@ -32,8 +32,8 @@ class RxRatpackKotlinTest : BehaviorSpec() {
         val client = testHttpClient(app)
         val r = client.get("")
         then("it works") {
-          r.statusCode shouldEqual 200
-          r.body.text shouldEqual "hello world"
+          r.statusCode shouldBe 200
+          r.body.text shouldBe "hello world"
         }
       }
       app.close()
@@ -58,8 +58,8 @@ class RxRatpackKotlinTest : BehaviorSpec() {
         val client = testHttpClient(app)
         val r = client.get("")
         then("it works") {
-          r.statusCode shouldEqual 200
-          r.body.text shouldEqual "hello"
+          r.statusCode shouldBe 200
+          r.body.text shouldBe "hello"
         }
       }
       app.close()
@@ -84,8 +84,8 @@ class RxRatpackKotlinTest : BehaviorSpec() {
         val client = testHttpClient(app)
         val r = client.get("")
         then("it works") {
-          r.statusCode shouldEqual 200
-          r.body.text shouldEqual "hello world"
+          r.statusCode shouldBe 200
+          r.body.text shouldBe "hello world"
         }
       }
       app.close()

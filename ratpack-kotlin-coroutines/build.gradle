@@ -4,10 +4,8 @@ dependencies {
 
   testCompile project(':ratpack-kotlin-test')
   testCompile commonDependencies.logback
-
-  testCompile "org.jetbrains.spek:spek-api:1.1.5"
-  testRuntime "org.jetbrains.spek:spek-junit-platform-engine:1.1.5"
-  testRuntime "org.junit.jupiter:junit-jupiter-engine:5.2.0"
+  testCompile commonDependencies.kotlinTest
+  testCompile commonDependencies.kotlinTestAssertions
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompile).all {
@@ -16,10 +14,4 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompile).all {
                                      "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
                                      "-Xuse-experimental=kotlinx.coroutines.ObsoleteCoroutinesApi",
                                      "-Xuse-experimental=kotlinx.coroutines.InternalCoroutinesApi"]
-}
-
-test {
-  useJUnitPlatform {
-    includeEngines 'spek'
-  }
 }
