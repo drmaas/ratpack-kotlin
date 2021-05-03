@@ -1,7 +1,7 @@
 dependencies {
-  compile project(':ratpack-kotlin-dsl')
-  compile commonDependencies.ratpackTest
+  api project(':ratpack-kotlin-dsl')
+  api commonDependencies.ratpackTest
 
-  testCompile commonDependencies.kotlinTest
-  testCompile commonDependencies.kotlinTestAssertions
+  testImplementation commonDependencies.kotlinTest
+  testImplementation commonDependencies.kotlinTestAssertions
 }

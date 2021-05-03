@@ -1,17 +1,19 @@
 dependencies {
-  compile project(":ratpack-kotlin-dsl")
-  compile commonDependencies.kotlinCoroutines
+  implementation project(":ratpack-kotlin-dsl")
+  implementation commonDependencies.kotlinCoroutines
 
-  testCompile project(':ratpack-kotlin-test')
-  testCompile commonDependencies.logback
-  testCompile commonDependencies.kotlinTest
-  testCompile commonDependencies.kotlinTestAssertions
+  testImplementation project(':ratpack-kotlin-test')
+  testImplementation commonDependencies.logback
+  testImplementation commonDependencies.kotlinTest
+  testImplementation commonDependencies.kotlinTestAssertions
 }
 
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompile).all {
-  kotlinOptions.freeCompilerArgs += ["-Xuse-experimental=kotlin.Experimental",
-                                     "-Xuse-experimental=kotlin.experimental.ExperimentalTypeInference",
-                                     "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
-                                     "-Xuse-experimental=kotlinx.coroutines.ObsoleteCoroutinesApi",
-                                     "-Xuse-experimental=kotlinx.coroutines.InternalCoroutinesApi"]
+compileKotlin {
+  kotlinOptions {
+    freeCompilerArgs += ["-Xuse-experimental=kotlin.Experimental",
+                         "-Xuse-experimental=kotlin.experimental.ExperimentalTypeInference",
+                         "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                         "-Xuse-experimental=kotlinx.coroutines.ObsoleteCoroutinesApi",
+                         "-Xuse-experimental=kotlinx.coroutines.InternalCoroutinesApi"]
+  }
 }

@@ -14,9 +14,6 @@ class RxRatpackKotlinTest : BehaviorSpec() {
     // test all with a closure
     given("test promise to observable") {
       val app = ratpack {
-        serverConfig {
-          port(8089)
-        }
         bindings {
           initialize()
         }
@@ -40,9 +37,6 @@ class RxRatpackKotlinTest : BehaviorSpec() {
     }
     given("test promise to single") {
       val app = ratpack {
-        serverConfig {
-          port(8089)
-        }
         bindings {
           initialize()
         }
@@ -66,9 +60,6 @@ class RxRatpackKotlinTest : BehaviorSpec() {
     }
     given("test observable to promise") {
       val app = ratpack {
-        serverConfig {
-          port(8089)
-        }
         bindings {
           initialize()
         }
