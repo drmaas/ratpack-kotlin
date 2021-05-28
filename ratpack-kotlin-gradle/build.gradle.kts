@@ -15,7 +15,7 @@ apply {
 dependencies {
   // other dependencies that your plugin requires
   implementation("io.ratpack:ratpack-gradle:${(project.ext["commonVersions"] as Map<String, String>)["ratpack"]}")
-  implementation("com.netflix.nebula:nebula-kotlin-plugin:${(project.ext["commonVersions"] as Map<String, String>)["kotlin"]}")
+  implementation("com.netflix.nebula:nebula-kotlin-plugin:${(project.ext["commonVersions"] as Map<String, String>)["kotlin13"]}")
 
   testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
   testImplementation("org.junit.jupiter:junit-jupiter-engine:5.6.0")

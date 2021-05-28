@@ -1,8 +1,8 @@
 dependencies {
-  compile commonDependencies.ratpackReactor
+  implementation commonDependencies.ratpackReactor
 
-  testCompile project(':ratpack-kotlin-test')
-  testCompile commonDependencies.kotlinTest
-  testCompile commonDependencies.kotlinTestAssertions
-  testCompile commonDependencies.logback
+  testImplementation project(':ratpack-kotlin-test')
+  testImplementation commonDependencies.kotlinTest
+  testImplementation commonDependencies.kotlinTestAssertions
+  testImplementation commonDependencies.logback
 }
