@@ -1,7 +1,7 @@
 package ratpack.kotlin.reactor
 
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.BehaviorSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.BehaviorSpec
 import ratpack.exec.Promise
 import ratpack.kotlin.test.embed.ratpack
 import ratpack.kotlin.test.testHttpClient

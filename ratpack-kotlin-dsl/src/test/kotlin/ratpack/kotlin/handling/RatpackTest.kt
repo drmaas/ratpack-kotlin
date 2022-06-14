@@ -1,7 +1,7 @@
 package ratpack.kotlin.handling
 
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.BehaviorSpec
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
 import ratpack.kotlin.test.embed.ratpack
 import ratpack.test.http.TestHttpClient.testHttpClient
 

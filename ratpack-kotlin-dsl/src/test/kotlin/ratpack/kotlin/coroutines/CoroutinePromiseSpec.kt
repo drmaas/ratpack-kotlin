@@ -1,7 +1,7 @@
 package ratpack.kotlin.coroutines
 
-import io.kotlintest.Spec
-import io.kotlintest.specs.StringSpec
+import io.kotest.core.spec.Spec
+import io.kotest.core.spec.style.StringSpec
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -18,21 +18,19 @@ class CoroutinePromiseSpec : StringSpec() {
 
   lateinit var embeddedApp: EmbeddedApp
 
-  override fun beforeSpec(spec: Spec) {
+  override suspend fun beforeSpec(spec: Spec) {
     embeddedApp = ratpack {
       handlers {
         get("test") {
-          async {
-            val p1 = promise {
-              delay(1000)
-              "p1"
-            }
-            val p2 = promise {
-              delay(1000)
-              "p2"
-            }
-            render(zip(p1, p2) { r1, r2 -> "$r1:$r2" })
+          val p1 = promise {
+            delay(1000)
+            "p1"
           }
+          val p2 = promise {
+            delay(1000)
+            "p2"
+          }
+          render(zip(p1, p2) { r1, r2 -> "$r1:$r2" })
         }
         get("test2") {
           val p1 = Promise.async<String> { d ->
@@ -52,12 +50,10 @@ class CoroutinePromiseSpec : StringSpec() {
           }
         }
         get("test3") {
-          async {
-            promise {
-              "p1"
-            }.then {
-              render(it)
-            }
+          promise {
+            "p1"
+          }.then {
+            render(it)
           }
         }
         get("test4") {
@@ -71,7 +67,7 @@ class CoroutinePromiseSpec : StringSpec() {
     }
   }
 
-  override fun afterSpec(spec: Spec) {
+  override suspend fun afterSpec(spec: Spec) {
     embeddedApp.close()
   }
 

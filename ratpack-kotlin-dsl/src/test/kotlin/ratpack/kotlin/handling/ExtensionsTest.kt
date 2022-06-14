@@ -2,8 +2,8 @@ package ratpack.kotlin.handling
 
 import com.google.inject.AbstractModule
 import com.google.inject.Provider
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.BehaviorSpec
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
 import ratpack.func.Action
 import ratpack.guice.BindingsSpec
 import ratpack.guice.ConfigurableModule

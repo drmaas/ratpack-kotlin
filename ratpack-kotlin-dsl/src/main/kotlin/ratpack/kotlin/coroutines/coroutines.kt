@@ -4,22 +4,20 @@
 
 package ratpack.kotlin.coroutines
 
-import kotlinx.coroutines.AbstractCoroutine
 import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Dispatchers.Default
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers.Unconfined
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import ratpack.exec.Blocking
 import ratpack.exec.Downstream
 import ratpack.exec.ExecSpec
-import ratpack.exec.Execution
 import ratpack.exec.Promise
 import ratpack.handling.Context
 import ratpack.kotlin.handling.KContext
@@ -37,16 +35,19 @@ import kotlin.coroutines.resumeWithException
  *
  * @param block The block to execute
  */
+@OptIn(DelicateCoroutinesApi::class)
+@ExperimentalCoroutinesApi
 fun Context.async(block: suspend CoroutineScope.() -> Any?) {
   GlobalScope.launch(Unconfined, CoroutineStart.UNDISPATCHED) {
     try {
-      block(this)
+      block()
     } catch (t: Throwable) {
       this@async.error(t)
     }
   }
 }
 
+@ExperimentalCoroutinesApi
 fun KContext.async(cb: suspend CoroutineScope.() -> Any?) = this.context.async(cb)
 
 /**
@@ -82,6 +83,7 @@ fun <T> lazyDeferIf(predicate: () -> Boolean, deferred: Deferred<T>): Lazy<Defer
  * Convert this [Promise] into a [Deferred] by launching an async coroutine, inside of which
  * the promised value will be resolved.
  */
+@OptIn(DelicateCoroutinesApi::class)
 fun <T> Promise<T>.defer(fork: Boolean = false, onStart: (ExecSpec) -> Unit = {}): Deferred<T> {
   return GlobalScope.async(Unconfined, CoroutineStart.UNDISPATCHED) {
     this@defer.await(fork, onStart)
@@ -99,6 +101,7 @@ fun <T> lazyAsyncIf(predicate: () -> Boolean, block: suspend CoroutineScope.() -
  * Convert this block into a [Deferred] by launching an async coroutine, inside of which
  * the block will be resolved.
  */
+@OptIn(DelicateCoroutinesApi::class)
 fun <T> async(start: CoroutineStart = CoroutineStart.UNDISPATCHED, block: suspend CoroutineScope.() -> T): Deferred<T> {
   return GlobalScope.async(Unconfined, start, block = block)
 }
@@ -221,39 +224,27 @@ suspend fun <T1, T2, T3, T4, T5, T6, T7, T8, T9, R> zip(p1: Promise<T1>, p2: Pro
 /**
  * Creates a [promise][Promise] that will run a given [block] in a coroutine.
  */
-fun <T : Any> CoroutineScope.promise(
+@OptIn(DelicateCoroutinesApi::class)
+@ExperimentalCoroutinesApi
+fun <T> promise(
+  scope: CoroutineScope = GlobalScope,
   context: CoroutineContext = EmptyCoroutineContext,
   block: suspend CoroutineScope.() -> T
 ): Promise<T> = Promise.async { downstream ->
-  launch(context, CoroutineStart.UNDISPATCHED) {
+  handlePromiseInternal(scope, context, downstream, block)
+}
+
+private fun <T> handlePromiseInternal(
+  scope: CoroutineScope,
+  context: CoroutineContext = EmptyCoroutineContext,
+  downstream: Downstream<T>,
+  block: suspend CoroutineScope.() -> T) {
+  scope.launch(context, CoroutineStart.UNDISPATCHED) {
     try {
-      downstream.success(block(this))
-    } catch (e: Exception) {
+      downstream.success(block())
+    } catch (e: Throwable) {
       downstream.error(e)
     }
   }
-}
 
-/**
- * Creates a [promise][Promise] that will run a given [block] in a coroutine.
- */
-fun <T : Any> promise(
-  context: CoroutineContext = EmptyCoroutineContext,
-  block: suspend CoroutineScope.() -> T
-): Promise<T> = Promise.async { downstream ->
-  val coroutine = PromiseCoroutine(context, downstream)
-  coroutine.start(CoroutineStart.UNDISPATCHED, coroutine, block)
-}
-
-private class PromiseCoroutine<T>(
-  parentContext: CoroutineContext,
-  private val downstream: Downstream<T>
-) : AbstractCoroutine<T>(parentContext, true) {
-  override fun onCompleted(value: T) {
-    downstream.success(value)
-  }
-
-  override fun onCancelled(cause: Throwable, handled: Boolean) {
-    downstream.error(cause)
-  }
 }

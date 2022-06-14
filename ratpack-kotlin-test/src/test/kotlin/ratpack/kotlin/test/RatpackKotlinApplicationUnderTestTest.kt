@@ -1,8 +1,8 @@
 package ratpack.kotlin.test
 
-import io.kotlintest.shouldBe
-import io.kotlintest.shouldNotBe
-import io.kotlintest.specs.StringSpec
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 import ratpack.guice.BindingsImposition
 import ratpack.impose.ImpositionsSpec
 import ratpack.kotlin.test.embed.ratpack

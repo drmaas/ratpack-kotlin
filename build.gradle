@@ -1,107 +1,68 @@
-plugins {
-  id "org.jetbrains.kotlin.jvm" version "1.4.32"
-  id "com.github.ben-manes.versions" version "0.36.0"
-  id "nebula.release" version "15.3.1"
-  id "com.vanniktech.dependency.graph.generator" version "0.5.0"
-  id "io.github.gradle-nexus.publish-plugin" version "1.1.0"
+buildscript {
+  repositories {
+    mavenCentral()
+    jcenter()
+  }
+  dependencies {
+    classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21'
+    classpath 'com.netflix.nebula:nebula-release-plugin:11.1.0'
+    classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
+    classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.5.3"
+  }
 }
 
-repositories {
-  mavenCentral()
-}
+apply plugin: 'nebula.nebula-release'
+apply plugin: 'io.codearte.nexus-staging'
 
-group= "me.drmaas"
+allprojects {
+  group = 'me.drmaas'
+  apply plugin: "idea"
+}
 
 subprojects {
-  apply plugin: "idea"
-  apply plugin: "kotlin"
   apply plugin: "java-library"
+  apply plugin: "org.jetbrains.kotlin.jvm"
+  apply plugin: "com.bmuschko.nexus"
   apply plugin: "maven-publish"
 
   repositories {
+    mavenLocal()
     mavenCentral()
-  }
-
-  dependencies {
-    implementation platform("org.jetbrains.kotlin:kotlin-bom:1.4.32")
-    implementation platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.4.3")
   }
 
   test {
     useJUnitPlatform()
   }
 
-  compileKotlin {
-    kotlinOptions {
-      jvmTarget = "1.8"
-    }
-  }
+  modifyPom {
+    project {
+      name 'Ratpack kotlin dsl library'
+      description 'Ratpack kotlin dsl library'
+      url 'https://github.com/drmaas/ratpack-kotlin'
+      inceptionYear '2016'
 
-  compileTestKotlin {
-    kotlinOptions {
-      jvmTarget = "1.8"
-    }
-  }
+      scm {
+        url 'https://github.com/drmaas/ratpack-kotlin'
+        connection 'scm:https://drmaas@github.com/drmaas/ratpack-kotlin.git'
+        developerConnection 'scm:git://github.com/drmaas/ratpack-kotlin.git'
+      }
 
-  java {
-    toolchain {
-      languageVersion = JavaLanguageVersion.of(8)
-    }
-  }
+      licenses {
+        license {
+          name 'The Apache Software License, Version 2.0'
+          url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+          distribution 'repo'
+        }
+      }
 
-  publishing {
-    repositories {
-      maven {
-        name = "OSSRH"
-        url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-        credentials {
-          username = System.getenv("MAVEN_USERNAME")
-          password = System.getenv("MAVEN_PASSWORD")
+      developers {
+        developer {
+          id 'drmaas'
+          name 'Dan Maas'
+          email 'drmaas@gmail.com'
         }
       }
     }
-    publications {
-      mavenPub(MavenPublication) {
-        from components.java
-
-        pom {
-          name = 'Ratpack kotlin dsl library'
-          description = 'Ratpack kotlin dsl library'
-          url = 'https://github.com/drmaas/ratpack-kotlin'
-          inceptionYear = '2016'
-
-          scm {
-            url = 'https://github.com/drmaas/ratpack-kotlin'
-            connection = 'scm:https://drmaas@github.com/drmaas/ratpack-kotlin.git'
-            developerConnection = 'scm:git://github.com/drmaas/ratpack-kotlin.git'
-          }
-
-          licenses {
-            license {
-              name = 'The Apache Software License, Version 2.0'
-              url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-              distribution = 'repo'
-            }
-          }
-          developers {
-            developer {
-              id = 'drmaas'
-              name = 'Dan Maas'
-              email = 'drmaas@gmail.com'
-            }
-          }
-        }
-      }
-    }
-  }
-
-}
-
-nexusPublishing {
-  repositories {
-    // set credentials as sonatypeUsername and sonatypePassword project properties,
-    // e.g. in ~/.gradle/gradle.properties
-    sonatype()
   }
 }
 

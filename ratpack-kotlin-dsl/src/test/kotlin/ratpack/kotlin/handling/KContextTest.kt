@@ -1,30 +1,33 @@
 package ratpack.kotlin.handling
 
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.BehaviorSpec
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.delay
 import ratpack.exec.Promise
+import ratpack.kotlin.coroutines.await
 import ratpack.kotlin.test.testHttpClient
 import java.lang.Thread.sleep
+import ratpack.kotlin.test.embed.ratpack
 
 class KContextTest : BehaviorSpec() {
 
   init {
     // test all with a closure
     given("a ratpack server") {
-      val app = ratpack.kotlin.test.embed.ratpack {
+      val app = ratpack {
         handlers {
           path("test") {
             byMethod {
               get {
-                render("hello")
+                send("hello")
               }
             }
           }
           path("async") {
             byMethod {
               get {
-                val text = fun(): String { sleep(500); return "hello" }()
-                render(text)
+                val text = suspend { await { sleep(100) } ; "hello" }
+                send(text())
               }
             }
           }
@@ -35,7 +38,7 @@ class KContextTest : BehaviorSpec() {
                   sleep(500)
                   d.success("hello")
                 }.then {
-                  render(it)
+                  send(it)
                 }
               }
             }
@@ -43,7 +46,7 @@ class KContextTest : BehaviorSpec() {
         }
       }
       `when`("a request is made to byContent closure") {
-        val client = testHttpClient(app)
+        val client = app.httpClient
         val r = client.get("test")
         then("it works") {
           r.statusCode shouldBe 200
@@ -52,7 +55,7 @@ class KContextTest : BehaviorSpec() {
         }
       }
       `when`("an async request is handled") {
-        val client = testHttpClient(app)
+        val client = app.httpClient
         val r = client.get("async")
         then("it works") {
           r.statusCode shouldBe 200
@@ -61,8 +64,8 @@ class KContextTest : BehaviorSpec() {
         }
       }
       `when`("an async promise is handled") {
-        val client = testHttpClient(app)
-        val r = client.get("async")
+        val client = app.httpClient
+        val r = client.get("promise")
         then("it works") {
           r.statusCode shouldBe 200
           r.body.text shouldBe "hello"

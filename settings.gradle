@@ -3,5 +3,4 @@ include 'ratpack-kotlin-dsl',
   'ratpack-kotlin-reactor',
   'ratpack-kotlin-test',
   'ratpack-kotlin-gradle',
-  'ratpack-kotlin-coroutines',
   'ratpack-kotlin-runner'

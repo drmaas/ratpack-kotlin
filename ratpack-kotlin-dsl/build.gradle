@@ -1,6 +1,7 @@
 dependencies {
   api commonDependencies.ratpack
   implementation commonDependencies.kotlinReflect
+  implementation commonDependencies.kotlinCoroutines
 
   testImplementation project(':ratpack-kotlin-test')
   testImplementation commonDependencies.kotlinTest

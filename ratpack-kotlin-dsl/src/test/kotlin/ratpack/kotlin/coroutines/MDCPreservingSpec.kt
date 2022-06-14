@@ -1,7 +1,7 @@
 package ratpack.kotlin.coroutines
 
-import io.kotlintest.Spec
-import io.kotlintest.specs.StringSpec
+import io.kotest.core.spec.Spec
+import io.kotest.core.spec.style.StringSpec
 import org.slf4j.MDC
 import ratpack.error.ServerErrorHandler
 import ratpack.kotlin.test.embed.ratpack
@@ -15,7 +15,7 @@ class MDCPreservingSpec : StringSpec() {
 
   lateinit var embeddedApp: EmbeddedApp
 
-  override fun beforeSpec(spec: Spec) {
+  override suspend fun beforeSpec(spec: Spec) {
     embeddedApp = ratpack {
       bindings {
         bindInstance(MDCInterceptor.instance())
@@ -49,7 +49,7 @@ class MDCPreservingSpec : StringSpec() {
             try {
               await { throw IllegalStateException() }
             } catch (t: Throwable) {
-              val reply = await { org.slf4j.MDC.get("key") } ?: "Key was not present in MDC"
+              val reply = await { MDC.get("key") } ?: "Key was not present in MDC"
               send(reply)
             }
           }
@@ -66,7 +66,7 @@ class MDCPreservingSpec : StringSpec() {
     }
   }
 
-  override fun afterSpec(spec: Spec) {
+  override suspend fun afterSpec(spec: Spec) {
     embeddedApp.close()
   }
 

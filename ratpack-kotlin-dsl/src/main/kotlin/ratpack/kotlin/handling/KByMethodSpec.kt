@@ -1,11 +1,14 @@
 package ratpack.kotlin.handling
 
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import ratpack.func.Block
 import ratpack.handling.ByMethodSpec
+import ratpack.handling.Context
 import ratpack.handling.Handler
+import ratpack.kotlin.coroutines.async
 
 class KByMethodSpec(val delegate: ByMethodSpec) {
-  fun get(cb: KContext.(KContext) -> Unit): KByMethodSpec = get(Handler { val ctx = KContext(it) ; ctx.cb(ctx) })
+  fun get(cb: suspend KContext.(KContext) -> Unit): KByMethodSpec = get(Handler { run(it, cb) })
   fun get(handler: Handler): KByMethodSpec {
     delegate.get(handler)
     return this
@@ -19,7 +22,7 @@ class KByMethodSpec(val delegate: ByMethodSpec) {
     return this
   }
 
-  fun post(cb: KContext.(KContext) -> Unit): KByMethodSpec = post(Handler { val ctx = KContext(it) ; ctx.cb(ctx) })
+  fun post(cb: suspend KContext.(KContext) -> Unit): KByMethodSpec = post(Handler { run(it, cb) })
   fun post(handler: Handler): KByMethodSpec {
     delegate.post(handler)
     return this
@@ -33,7 +36,7 @@ class KByMethodSpec(val delegate: ByMethodSpec) {
     return this
   }
 
-  fun put(cb: KContext.(KContext) -> Unit): KByMethodSpec = put(Handler { val ctx = KContext(it) ; ctx.cb(ctx) })
+  fun put(cb: suspend KContext.(KContext) -> Unit): KByMethodSpec = put(Handler { run(it, cb) })
   fun put(handler: Handler): KByMethodSpec {
      delegate.put(handler)
     return this
@@ -47,7 +50,7 @@ class KByMethodSpec(val delegate: ByMethodSpec) {
     return this
   }
 
-  fun patch(cb: KContext.(KContext) -> Unit): KByMethodSpec = patch(Handler { val ctx = KContext(it) ; ctx.cb(ctx) })
+  fun patch(cb: suspend suspend  KContext.(KContext) -> Unit): KByMethodSpec = patch(Handler { run(it, cb) })
   fun patch(handler: Handler): KByMethodSpec {
     delegate.patch(handler)
     return this
@@ -61,7 +64,7 @@ class KByMethodSpec(val delegate: ByMethodSpec) {
     return this
   }
 
-  fun options(cb: KContext.(KContext) -> Unit): KByMethodSpec = options(Handler { val ctx = KContext(it) ; ctx.cb(ctx) })
+  fun options(cb: suspend KContext.(KContext) -> Unit): KByMethodSpec = options(Handler { run(it, cb) })
   fun options(handler: Handler): KByMethodSpec {
     delegate.options(handler)
     return this
@@ -75,7 +78,7 @@ class KByMethodSpec(val delegate: ByMethodSpec) {
     return this
   }
 
-  fun delete(cb: KContext.(KContext) -> Unit): KByMethodSpec = delete(Handler { val ctx = KContext(it) ; ctx.cb(ctx) })
+  fun delete(cb: suspend KContext.(KContext) -> Unit): KByMethodSpec = delete(Handler { run(it, cb) })
   fun delete(handler: Handler): KByMethodSpec {
     delegate.delete(handler)
     return this
@@ -89,7 +92,7 @@ class KByMethodSpec(val delegate: ByMethodSpec) {
     return this
   }
 
-  fun named(methodName: String, cb: KContext.(KContext) -> Unit): KByMethodSpec = named(methodName, Handler { val ctx = KContext(it) ; ctx.cb(ctx) })
+  fun named(methodName: String, cb: suspend KContext.(KContext) -> Unit): KByMethodSpec = named(methodName, Handler { run(it, cb) })
   fun named(methodName: String, handler: Handler): KByMethodSpec {
     delegate.named(methodName, handler)
     return this
@@ -101,6 +104,14 @@ class KByMethodSpec(val delegate: ByMethodSpec) {
   fun named(methodName: String, clazz: Class<out Handler>): KByMethodSpec {
     delegate.named(methodName, clazz)
     return this
+  }
+
+  @OptIn(ExperimentalCoroutinesApi::class)
+  private inline fun run(context: Context, crossinline cb: suspend KContext.(KContext) -> Unit) {
+    val ctx = KContext(context)
+    ctx.async {
+      ctx.cb(ctx)
+    }
   }
 
 }

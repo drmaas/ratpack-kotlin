@@ -1,11 +1,16 @@
 package ratpack.kotlin.handling
 
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import ratpack.handling.Context
 import ratpack.handling.Handler
+import ratpack.kotlin.coroutines.async
 
 interface KHandler: Handler {
-  fun handle(ctx: KContext)
+  suspend fun handle(ctx: KContext)
+  @OptIn(ExperimentalCoroutinesApi::class)
   override fun handle(ctx: Context) {
-    handle(KContext(ctx))
+    ctx.async {
+      handle(KContext(ctx))
+    }
   }
 }

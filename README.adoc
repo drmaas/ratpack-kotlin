@@ -1,6 +1,6 @@
 = ratpack-kotlin
 
-image:https://travis-ci.org/drmaas/ratpack-kotlin.svg?branch=master["Build Status", link="https://travis-ci.org/drmaas/ratpack-kotlin"]
+image::https://github.com/drmaas/ratpack-kotlin/actions/workflows/gradle.yml/badge.svg["build"]
 
 image::https://forthebadge.com/images/badges/uses-badges.svg["forthebadge", https://forthebadge.com]
 
