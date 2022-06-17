@@ -4,6 +4,11 @@ image::https://github.com/drmaas/ratpack-kotlin/actions/workflows/gradle.yml/bad
 
 image::https://forthebadge.com/images/badges/uses-badges.svg["forthebadge", https://forthebadge.com]
 
+== Project Status
+
+This project is in maintenance mode. PRs and issues are welcome, but my time
+will be limited to defect fixes and other critical maintenance as needed.
+
 == Overview
 
 Build fluent kotlin ratpack applications. Features:
