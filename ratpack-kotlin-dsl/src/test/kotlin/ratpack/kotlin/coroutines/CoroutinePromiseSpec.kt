@@ -6,7 +6,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 import ratpack.exec.Promise
 import ratpack.exec.util.ParallelBatch
 import ratpack.kotlin.test.embed.ratpack
@@ -77,40 +76,32 @@ class CoroutinePromiseSpec : StringSpec() {
       check(response.body.text == "p1:p2")
     }
     "parallel promises with coroutines - load" {
-      runBlocking {
-        val time = measureTimeMillis {
-          (1..10).map {
-            GlobalScope.async {
-              embeddedApp.httpClient.get("test")
-            }
-          }.awaitAll()
-        }
-        println(time)
+      val time = measureTimeMillis {
+        (1..10).map {
+          async {
+            embeddedApp.httpClient.get("test")
+          }
+        }.awaitAll()
       }
+      println(time)
     }
     "parallel promises without coroutines - load" {
-      runBlocking {
-        val time = measureTimeMillis {
-          (1..10).map {
-            GlobalScope.async {
-              embeddedApp.httpClient.get("test2")
-            }
-          }.awaitAll()
-        }
-        println(time)
+      val time = measureTimeMillis {
+        (1..10).map {
+          async {
+            embeddedApp.httpClient.get("test2")
+          }
+        }.awaitAll()
       }
+      println(time)
     }
     "create promise in a coroutine inside global coroutine context" {
-      runBlocking {
-        val response = embeddedApp.httpClient.get("test3")
-        check(response.body.text == "p1")
-      }
+      val response = embeddedApp.httpClient.get("test3")
+      check(response.body.text == "p1")
     }
     "create promise in a coroutine outside global coroutine context" {
-      runBlocking {
-        val response = embeddedApp.httpClient.get("test4")
-        check(response.body.text == "p1")
-      }
+      val response = embeddedApp.httpClient.get("test4")
+      check(response.body.text == "p1")
     }
   }
 }
