@@ -1,7 +1,7 @@
 package ratpack.kotlin.handling
 
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.BehaviorSpec
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
 import ratpack.kotlin.test.testHttpClient
 
 class KHandlerTest: BehaviorSpec() {
@@ -40,13 +40,13 @@ class KHandlerTest: BehaviorSpec() {
 }
 
 class MyKHandler: KHandler {
-  override fun handle(ctx: KContext) {
+  override suspend fun handle(ctx: KContext) {
     ctx.render("hello")
   }
 }
 
 class MyKHandler2: KHandler {
-  override fun handle(ctx: KContext) {
+  override suspend fun handle(ctx: KContext) {
     ctx.render("hello")
   }
 }

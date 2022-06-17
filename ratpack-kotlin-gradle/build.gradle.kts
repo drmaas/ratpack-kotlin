@@ -5,7 +5,7 @@ plugins {
 }
 
 repositories {
-  jcenter()
+  mavenCentral()
 }
 
 apply {
@@ -15,12 +15,11 @@ apply {
 dependencies {
   // other dependencies that your plugin requires
   implementation("io.ratpack:ratpack-gradle:${(project.ext["commonVersions"] as Map<String, String>)["ratpack"]}")
-  implementation("com.netflix.nebula:nebula-kotlin-plugin:${(project.ext["commonVersions"] as Map<String, String>)["kotlin13"]}")
+  implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:${(project.ext["commonVersions"] as Map<String, String>)["kotlin"]}")
 
-  testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
-  testImplementation("org.junit.jupiter:junit-jupiter-engine:5.6.0")
-  testImplementation("io.kotlintest:kotlintest-runner-junit5:${(project.ext["commonVersions"] as Map<String, String>)["kotlinTest"]}")
-  testImplementation("io.kotlintest:kotlintest-assertions:${(project.ext["commonVersions"] as Map<String, String>)["kotlinTest"]}")
+  testImplementation("io.kotest:kotest-runner-junit5-jvm:${(project.ext["commonVersions"] as Map<String, String>)["kotlinTest"]}")
+  testImplementation("io.kotest:kotest-assertions-core-jvm:${(project.ext["commonVersions"] as Map<String, String>)["kotlinTest"]}")
+  testImplementation("ch.qos.logback:logback-classic:${(project.ext["commonVersions"] as Map<String, String>)["logback"]}")
 }
 
 gradlePlugin {

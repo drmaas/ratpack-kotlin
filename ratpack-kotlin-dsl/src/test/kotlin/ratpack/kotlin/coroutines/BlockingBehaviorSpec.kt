@@ -1,11 +1,13 @@
 package ratpack.kotlin.coroutines
 
-import io.kotlintest.TestCase
-import io.kotlintest.TestResult
-import io.kotlintest.specs.StringSpec
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.core.test.TestCase
+import io.kotest.core.test.TestResult
+import kotlinx.coroutines.delay
 import ratpack.error.ServerErrorHandler
 import ratpack.kotlin.test.embed.ratpack
 import ratpack.test.embed.EmbeddedApp
+import java.lang.Thread.sleep
 import java.util.concurrent.Semaphore
 import kotlin.concurrent.thread
 
@@ -19,13 +21,14 @@ class BlockingBehaviorSpec : StringSpec() {
   lateinit var semaphore: Semaphore
   lateinit var embeddedApp: EmbeddedApp
 
-  override fun beforeTest(testCase: TestCase) {
+  override suspend fun beforeTest(testCase: TestCase) {
     semaphore = Semaphore(1)
     embeddedApp = ratpack {
       serverConfig { threads(1) }
       handlers {
         register {
           add(ServerErrorHandler { context, throwable ->
+            throwable.printStackTrace()
             context.response.status(500).send("CUSTOM ERROR HANDLER $throwable")
           })
         }
@@ -33,7 +36,7 @@ class BlockingBehaviorSpec : StringSpec() {
         get("sleepblock") {
           println("INSIDE SLEEPBLOCK HANDLER $threadName")
           semaphore.release()
-          Thread.sleep(1000 * 5)
+          sleep(1000 * 5)
           println("EXITING SLEEPBLOCK HANDLER $threadName")
           send("SLEEP")
         }
@@ -42,62 +45,53 @@ class BlockingBehaviorSpec : StringSpec() {
           println("INSIDE SLEEP HANDLER $threadName")
           semaphore.release()
 
-          async {
-            println("SLEEPING ASYNC $threadName")
-            var message = await {
-              println("SLEEPING BLOCK ASYNC $threadName")
-              Thread.sleep(1000 * 5)
-              "WOKE UP"
-            }
-            println("SLEEPING ASYNC OVER $threadName")
-            send(message)
+          println("SLEEPING ASYNC $threadName")
+          var message = await {
+            println("SLEEPING BLOCK ASYNC $threadName")
+            sleep(1000 * 5)
+            "WOKE UP"
           }
+          println("SLEEPING ASYNC OVER $threadName")
+          send(message)
           println("EXITING SLEEP HANDLER $threadName")
-
         }
 
         get("quick") {
           println("INSIDE QUICK HANDLER $threadName")
-          Thread.sleep(100)
+          delay(100)
           send("ECHO $threadName")
         }
 
         get("throw") {
-          async {
-            println("INSIDE ASYNC EXCEPTION THROWING HANDLER $threadName")
-            Thread.sleep(100)
-            println("INSIDE ASYNC EXCEPTION THROWING HANDLER, ABOUT TO THROW $threadName")
-            throw IllegalStateException("Except me!")
-          }
+          println("INSIDE ASYNC EXCEPTION THROWING HANDLER $threadName")
+          sleep(100)
+          println("INSIDE ASYNC EXCEPTION THROWING HANDLER, ABOUT TO THROW $threadName")
+          throw IllegalStateException("Except me!")
         }
 
         get("throwcatch") {
-          async {
-            println("INSIDE ASYNC EXCEPTION THROWING  AND CATCHING HANDLER $threadName")
-            Thread.sleep(100)
-            try {
-              println("INSIDE ASYNC EXCEPTION THROWING HANDLER, ABOUT TO THROW $threadName")
-              throw IllegalStateException("Except me!")
-            } catch (t: Throwable) {
-              render("Caught it")
-            }
+          println("INSIDE ASYNC EXCEPTION THROWING  AND CATCHING HANDLER $threadName")
+          sleep(100)
+          try {
+            println("INSIDE ASYNC EXCEPTION THROWING HANDLER, ABOUT TO THROW $threadName")
+            throw IllegalStateException("Except me!")
+          } catch (t: Throwable) {
+            render("Caught it")
           }
         }
 
         post("echobody") {
           println("INSIDE ECHOBODY HANDLER $threadName")
-          async {
-            println("INSIDE ECHOBODY ASYNC $threadName")
-            val txt = request.body.await().text
-            println("INSIDE ECHOBODY ASYNC AFTER COROUTINE $threadName")
-            send(txt)
-          }
+          println("INSIDE ECHOBODY ASYNC $threadName")
+          val txt = request.body.await().text
+          println("INSIDE ECHOBODY ASYNC AFTER COROUTINE $threadName")
+          send(txt)
         }
       }
     }
   }
 
-  override fun afterTest(testCase: TestCase, result: TestResult) {
+  override suspend fun afterTest(testCase: TestCase, result: TestResult) {
     embeddedApp.close()
   }
 
@@ -124,7 +118,7 @@ class BlockingBehaviorSpec : StringSpec() {
         simpleRequestFinished = true
       }
       semaphore.acquire()
-      Thread.sleep(1000)
+      sleep(1000)
 
       check(!blockingSleepFinished) { "Blocking should still be computing" }
       check(!simpleRequestFinished) { "Quick thread should be waiting on the blocking head" }
@@ -155,7 +149,7 @@ class BlockingBehaviorSpec : StringSpec() {
         }
       }
       semaphore.acquire()
-      Thread.sleep(1000)
+      sleep(1000)
 
       check(!blockingSleepFinished) { "Blocking should still be computing" }
       check(simpleRequestFinished) { "Quick thread should NOT be waiting on the blocking head" }

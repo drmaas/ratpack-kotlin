@@ -14,18 +14,17 @@ import ratpack.server.ServerConfig
  * Allow for the kotlin DSL to be used from classes extending KChainAction.
  */
 abstract class KChainAction : Action<Chain> {
-  var delegate: ThreadLocal<KChain> = ThreadLocal()
+  lateinit var delegate: KChain
 
   abstract fun execute()
 
   override fun execute(chain: Chain) {
-    delegate.set(KChain(chain))
+    delegate = KChain(chain)
     execute()
-    delegate.remove()
   }
 
   //convenience to get delegate value
-  fun dg(): KChain = delegate.get()
+  fun dg(): KChain = delegate
 
   //mirror of available functions in GroovyChain
 
@@ -40,12 +39,12 @@ abstract class KChainAction : Action<Chain> {
   fun prefix(path: String = "", action: Class<out Action<in Chain>>): KChain = dg().prefix(path, action)
 
   //all
-  inline fun all(crossinline cb: KContext.(KContext) -> Unit): KChain = dg().all(cb)
+  inline fun all(crossinline cb: suspend KContext.(KContext) -> Unit): KChain = dg().all(cb)
   fun all(handler: Handler): KChain = dg().all(handler)
   fun all(handler: Class<out Handler>): KChain = dg().all(handler)
 
   //path
-  inline fun path(path: String = "", crossinline cb: KContext.(KContext) -> Unit): KChain = dg().path(path, cb)
+  inline fun path(path: String = "", crossinline cb: suspend KContext.(KContext) -> Unit): KChain = dg().path(path, cb)
   fun path(path: String = "", handler: Handler): KChain = dg().path(path, handler)
   fun path(path: String = "", handler: Class<out Handler>): KChain = dg().path(path, handler)
 
@@ -54,32 +53,32 @@ abstract class KChainAction : Action<Chain> {
   fun chain(action: Class<out Action<in Chain>>): Handler = dg().chain(action)
 
   //get
-  inline fun get(path: String = "", crossinline cb: KContext.(KContext) -> Unit): KChain = dg().get(path, cb)
+  inline fun get(path: String = "", crossinline cb: suspend KContext.(KContext) -> Unit): KChain = dg().get(path, cb)
   fun get(path: String = "", handler: Handler): KChain = dg().get(path, handler)
   fun get(path: String = "", handler: Class<out Handler>): KChain = dg().get(path, handler)
 
   //put
-  inline fun put(path: String = "", crossinline cb: KContext.(KContext) -> Unit): KChain = dg().put(path, cb)
+  inline fun put(path: String = "", crossinline cb: suspend KContext.(KContext) -> Unit): KChain = dg().put(path, cb)
   fun put(path: String = "", handler: Handler): KChain = dg().put(path, handler)
   fun put(path: String = "", handler: Class<out Handler>): KChain = dg().put(path, handler)
 
   //post
-  inline fun post(path: String = "", crossinline cb: KContext.(KContext) -> Unit): KChain = dg().post(path, cb)
+  inline fun post(path: String = "", crossinline cb: suspend KContext.(KContext) -> Unit): KChain = dg().post(path, cb)
   fun post(path: String = "", handler: Handler): KChain = dg().post(path, handler)
   fun post(path: String = "", handler: Class<out Handler>): KChain = dg().post(path, handler)
 
   //delete
-  inline fun delete(path: String = "", crossinline cb: KContext.(KContext) -> Unit): KChain = dg().delete(path, cb)
+  inline fun delete(path: String = "", crossinline cb: suspend KContext.(KContext) -> Unit): KChain = dg().delete(path, cb)
   fun delete(path: String = "", handler: Handler): KChain = dg().delete(path, handler)
   fun delete(path: String = "", handler: Class<out Handler>): KChain = dg().delete(path, handler)
 
   //patch
-  inline fun patch(path: String = "", crossinline cb: KContext.(KContext) -> Unit): KChain = dg().patch(path, cb)
+  inline fun patch(path: String = "", crossinline cb: suspend KContext.(KContext) -> Unit): KChain = dg().patch(path, cb)
   fun patch(path: String = "", handler: Handler): KChain = dg().patch(path, handler)
   fun patch(path: String = "", handler: Class<out Handler>): KChain = dg().patch(path, handler)
 
   //options
-  inline fun options(path: String = "", crossinline cb: KContext.(KContext) -> Unit): KChain = dg().options(path, cb)
+  inline fun options(path: String = "", crossinline cb: suspend KContext.(KContext) -> Unit): KChain = dg().options(path, cb)
   fun options(path: String = "", handler: Handler): KChain = dg().options(path, handler)
   fun options(path: String = "", handler: Class<out Handler>): KChain = dg().options(path, handler)
 
@@ -89,7 +88,7 @@ abstract class KChainAction : Action<Chain> {
   fun fileSystem(path: String = "", action: Class<out Action<in Chain>>): KChain = dg().fileSystem(path, action)
 
   //files
-  inline fun files(crossinline cb: FileHandlerSpec.(FileHandlerSpec) -> Unit): KChain = dg().files(cb)
+  inline fun files(crossinline cb:  FileHandlerSpec.(FileHandlerSpec) -> Unit): KChain = dg().files(cb)
   fun files(): KChain = dg().files()
   fun files(action: Action<in FileHandlerSpec>): KChain = dg().files(action)
 
@@ -127,7 +126,7 @@ abstract class KChainAction : Action<Chain> {
   fun `when`(test: Boolean, action: Class<out Action<in Chain>>): KChain = dg().`when`(test, action)
 
   //onlyIf
-  fun onlyIf(test: Predicate<in Context>, cb: KContext.(KContext) -> Unit): KChain = dg().onlyIf(test, cb)
+  fun onlyIf(test: Predicate<in Context>, cb: suspend KContext.(KContext) -> Unit): KChain = dg().onlyIf(test, cb)
   fun onlyIf(test: Predicate<in Context>, handler: Handler): KChain = dg().onlyIf(test, handler)
   fun onlyIf(test: Predicate<in Context>, handler: Class<out Handler>): KChain = dg().onlyIf(test, handler)
 

@@ -1,11 +1,13 @@
 package ratpack.kotlin.handling
 
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import ratpack.file.FileHandlerSpec
 import ratpack.func.Action
 import ratpack.func.Predicate
 import ratpack.handling.Chain
 import ratpack.handling.Context
 import ratpack.handling.Handler
+import ratpack.kotlin.coroutines.async
 import ratpack.registry.Registry
 import ratpack.registry.RegistrySpec
 
@@ -34,7 +36,7 @@ class KChain(val delegate: Chain) {
   }
 
   inline fun fileSystem(path: String = "", crossinline cb: KChain.(KChain) -> Unit): KChain {
-    delegate.fileSystem(path) { val c = KChain(it); c.cb(c) }
+    delegate.fileSystem(path) { run(it, cb) }
     return this
   }
   fun fileSystem(path: String = "", action: Action<in Chain>): KChain{
@@ -47,7 +49,7 @@ class KChain(val delegate: Chain) {
   }
 
   inline fun prefix(path: String = "", crossinline cb: KChain.(KChain) -> Unit): KChain {
-    delegate.prefix(path) { val c = KChain(it); c.cb(c) }
+    delegate.prefix(path) { run(it, cb) }
     return this
   }
   fun prefix(path: String = "", action: Action<in Chain>): KChain {
@@ -59,8 +61,8 @@ class KChain(val delegate: Chain) {
     return this
   }
 
-  inline fun all(crossinline cb: KContext.(KContext) -> Unit): KChain {
-    delegate.all { val c = KContext(it); c.cb(c) }
+  inline fun all(crossinline cb: suspend KContext.(KContext) -> Unit): KChain {
+    delegate.all { run(it, cb)}
     return this
   }
   fun all(handler: Handler): KChain {
@@ -72,8 +74,8 @@ class KChain(val delegate: Chain) {
     return this
   }
 
-  inline fun path(path: String = "", crossinline cb: KContext.(KContext) -> Unit): KChain {
-    delegate.path(path) { val ctx = KContext(it); ctx.cb(ctx) }
+  inline fun path(path: String = "", crossinline cb: suspend KContext.(KContext) -> Unit): KChain {
+    delegate.path(path) { run(it, cb) }
     return this
   }
   fun path(path: String = "", handler: Handler): KChain {
@@ -86,7 +88,7 @@ class KChain(val delegate: Chain) {
   }
 
   inline fun host(hostName: String, crossinline cb: KChain.(KChain) -> Unit): KChain {
-    delegate.host(hostName) { val c = KChain(it); c.cb(c) }
+    delegate.host(hostName) { run(it, cb) }
     return this
   }
   fun host(path: String = "", action: Action<in Chain>): KChain {
@@ -99,7 +101,7 @@ class KChain(val delegate: Chain) {
   }
 
   inline fun insert(crossinline cb: KChain.(KChain) -> Unit): KChain {
-    delegate.insert { val c = KChain(it); c.cb(c) }
+    delegate.insert { run(it, cb) }
     return this
   }
   fun insert(action: Action<in Chain>): KChain {
@@ -132,7 +134,7 @@ class KChain(val delegate: Chain) {
     return this
   }
   inline fun register(crossinline registryAction: KRegistrySpec.(KRegistrySpec) -> Unit, crossinline cb: KChain.(c: KChain) -> Unit): KChain {
-    delegate.register({ val r = KRegistrySpec(it); r.registryAction(r) }, { val c = KChain(it); c.cb(c) })
+    delegate.register({ val r = KRegistrySpec(it); r.registryAction(r) }, { run(it, cb) })
     return this
   }
   fun register(registry: Registry): KChain {
@@ -140,7 +142,7 @@ class KChain(val delegate: Chain) {
     return this
   }
   inline fun register(registry: Registry, crossinline cb: KChain.(KChain) -> Unit): KChain {
-    delegate.register(registry) { val c = KChain(it); c.cb(c) }
+    delegate.register(registry) { run(it, cb) }
     return this
   }
   inline fun register(crossinline registryAction: KRegistrySpec.(KRegistrySpec) -> Unit): KChain {
@@ -154,8 +156,8 @@ class KChain(val delegate: Chain) {
   }
 
   @Suppress("ReplaceGetOrSet")
-  inline fun get(path: String = "", crossinline cb: KContext.(KContext) -> Unit): KChain {
-    delegate.get(path) { val c = KContext(it); c.cb(c) }
+  inline fun get(path: String = "", crossinline cb: suspend KContext.(KContext) -> Unit): KChain {
+    delegate.get(path) { run(it, cb) }
     return this
   }
   fun get(path: String = "", handler: Handler): KChain {
@@ -167,8 +169,8 @@ class KChain(val delegate: Chain) {
     return this
   }
 
-  inline fun put(path: String = "", crossinline cb: KContext.(KContext) -> Unit): KChain {
-    delegate.put(path) { val c = KContext(it); c.cb(c) }
+  inline fun put(path: String = "", crossinline cb: suspend KContext.(KContext) -> Unit): KChain {
+    delegate.put(path) { run(it, cb) }
     return this
   }
   fun put(path: String = "", handler: Handler): KChain {
@@ -180,8 +182,8 @@ class KChain(val delegate: Chain) {
     return this
   }
 
-  inline fun post(path: String = "", crossinline cb: KContext.(KContext) -> Unit): KChain {
-    delegate.post(path) { val c = KContext(it); c.cb(c) }
+  inline fun post(path: String = "", crossinline cb: suspend KContext.(KContext) -> Unit): KChain {
+    delegate.post(path) { run(it, cb) }
     return this
   }
   fun post(path: String = "", handler: Handler): KChain {
@@ -193,8 +195,8 @@ class KChain(val delegate: Chain) {
     return this
   }
 
-  inline fun delete(path: String = "", crossinline cb: KContext.(KContext) -> Unit): KChain {
-    delegate.delete(path) { val c = KContext(it); c.cb(c) }
+  inline fun delete(path: String = "", crossinline cb: suspend KContext.(KContext) -> Unit): KChain {
+    delegate.delete(path) { run(it, cb) }
     return this
   }
   fun delete(path: String = "", handler: Handler): KChain {
@@ -206,8 +208,8 @@ class KChain(val delegate: Chain) {
     return this
   }
 
-  inline fun options(path: String = "", crossinline cb: KContext.(KContext) -> Unit): KChain {
-    delegate.options(path) { val c = KContext(it); c.cb(c) }
+  inline fun options(path: String = "", crossinline cb: suspend KContext.(KContext) -> Unit): KChain {
+    delegate.options(path) { run(it, cb) }
     return this
   }
   fun options(path: String = "", handler: Handler): KChain {
@@ -219,8 +221,8 @@ class KChain(val delegate: Chain) {
     return this
   }
 
-  inline fun patch(path: String = "", crossinline cb: KContext.(KContext) -> Unit): KChain {
-    delegate.patch(path) { val c = KContext(it); c.cb(c) }
+  inline fun patch(path: String = "", crossinline cb: suspend KContext.(KContext) -> Unit): KChain {
+    delegate.patch(path) { run(it, cb) }
     return this
   }
   fun patch(path: String = "", handler: Handler): KChain {
@@ -232,8 +234,8 @@ class KChain(val delegate: Chain) {
     return this
   }
 
-  fun onlyIf(test: Predicate<in Context>, cb: KContext.(KContext) -> Unit): KChain {
-    delegate.onlyIf(test, KHandlers.from(cb))
+  fun onlyIf(test: Predicate<in Context>, cb: suspend KContext.(KContext) -> Unit): KChain {
+    delegate.onlyIf({ ctx: Context -> test.apply(ctx) }, { run(it, cb) })
     return this
   }
   fun onlyIf(test: Predicate<in Context>, handler: Handler): KChain {
@@ -254,11 +256,11 @@ class KChain(val delegate: Chain) {
     return this
   }
   inline fun `when`(test: Predicate<in Context>, crossinline cb: KChain.(KChain) -> Unit): KChain {
-    delegate.`when`({ ctx: Context -> test.apply(ctx) }) { val c = KChain(it); c.cb(c) }
+    delegate.`when`({ ctx: Context -> test.apply(ctx) }) { run(it, cb) }
     return this
   }
   inline fun `when`(test: Boolean, crossinline cb: KChain.(KChain) -> Unit): KChain {
-    delegate.`when`(test) { val c = KChain(it); c.cb(c) }
+    delegate.`when`(test) { run(it, cb) }
     return this
   }
   fun `when`(test: Boolean, action: Action<in Chain>): KChain {
@@ -273,6 +275,19 @@ class KChain(val delegate: Chain) {
   fun notFound(): KChain {
     delegate.notFound()
     return this
+  }
+
+  @OptIn(ExperimentalCoroutinesApi::class)
+  inline fun run(context: Context, crossinline cb: suspend KContext.(KContext) -> Unit) {
+    val ctx = KContext(context)
+    ctx.async {
+      ctx.cb(ctx)
+    }
+  }
+
+  inline fun run(chain: Chain, crossinline cb: KChain.(KChain) -> Unit) {
+    val c = KChain(chain)
+    c.cb(c)
   }
 
 }

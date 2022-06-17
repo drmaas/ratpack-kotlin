@@ -1,15 +1,18 @@
 package ratpack.kotlin.handling
 
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import ratpack.func.Action
 import ratpack.handling.Chain
 import ratpack.handling.Handler
 import ratpack.handling.Handlers
+import ratpack.kotlin.coroutines.async
 import ratpack.registry.Registry
 import ratpack.server.ServerConfig
 
 object KHandlers {
 
-  inline fun from(crossinline cb: KContext.(KContext) -> Unit): Handler = { ctx: KContext -> ctx.cb(ctx) } as Handler
+  @OptIn(ExperimentalCoroutinesApi::class)
+  inline fun from(crossinline cb: suspend KContext.(KContext) -> Unit): Handler = { ctx: KContext -> ctx.async { ctx.cb(ctx) } } as Handler
 
   fun chain(serverConfig: ServerConfig, action: Action<in KChain>): Handler {
     return chain(serverConfig, Registry.empty(), action)

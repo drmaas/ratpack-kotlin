@@ -1,7 +1,7 @@
 package ratpack.kotlin.rx2
 
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.BehaviorSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.BehaviorSpec
 import io.reactivex.Observable
 import io.reactivex.functions.Consumer
 import ratpack.exec.Promise
