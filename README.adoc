@@ -74,6 +74,16 @@ Maven
 </dependency>
 ```
 
+== Local Setup
+
+This project requires java11.
+
+`sdk install java 11.0.15-tem`
+
+Then:
+
+`./gradlew check`
+
 == Building and Releasing
 
 ```
