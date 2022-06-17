@@ -1,7 +1,7 @@
 buildscript {
   repositories {
-    mavenCentral()
     jcenter()
+    mavenCentral()
   }
   dependencies {
     classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21'
@@ -33,7 +33,23 @@ subprojects {
   test {
     useJUnitPlatform()
     testLogging {
-      showStandardStreams = true
+      showStandardStreams = false
+    }
+    beforeSuite {}
+    afterSuite {}
+    beforeTest { desc ->
+      logger.lifecycle("START $desc.className > ${desc.name.replaceAll('\\(.*?\\)\\z', '')}")
+    }
+    afterTest { desc, result ->
+      logger.lifecycle(
+        String.format("%s (%4dms) %s > %s",
+          result.resultType,
+          result.endTime - result.startTime,
+          desc.className,
+          // throw away the trailing (.*) at the end of the method name
+          desc.name.replaceAll("\\(.*?\\)\\z", "")
+        )
+      )
     }
   }
 
