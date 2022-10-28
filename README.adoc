@@ -6,12 +6,13 @@ image::https://forthebadge.com/images/badges/uses-badges.svg["forthebadge", http
 
 == Project Status
 
-This project is in maintenance mode. PRs and issues are welcome, but my time
-will be limited to defect fixes and other critical maintenance as needed.
+This project is in maintenance mode. PRs and issues are welcome, but my time will be limited to defect fixes and other critical maintenance as needed.
+
+For users looking to user ratpack and kotlin together, I recommend using the outstanding library link:https://github.com/http4k/http4k[http4k] with ratpack as a link:https://www.http4k.org/guide/reference/servers/[server backend]. More details can be found link:https://github.com/http4k/http4k/blob/master/http4k-server/ratpack/src/main/kotlin/org/http4k/server/Ratpack.kt[in the server backend implementation].
 
 == Overview
 
-Build fluent kotlin ratpack applications. Features:
+Build fluent kotlin link:https://github.com/ratpack/ratpack[ratpack] applications. Features:
 
 * Server, Bindings, Chain, and Handler DSL
 
