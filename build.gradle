@@ -23,6 +23,10 @@ allprojects {
   java.targetCompatibility = JavaVersion.VERSION_11
 }
 
+nebulaRelease {
+  releaseBranchPatterns = [/master/, /HEAD/, /main/, /(release(-|\/))?\d+(\.\d+)?\.x/, /v?\d+\.\d+\.\d+/]
+}
+
 subprojects {
   apply plugin: "org.jetbrains.kotlin.jvm"
   apply plugin: "com.bmuschko.nexus"
